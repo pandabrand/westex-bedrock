@@ -1,0 +1,23 @@
+// @import url('//fonts.googleapis.com/css?family=Raleway|Montserrat');
+
+// Grid settings
+$main-sm-columns:       12;
+$sidebar-sm-columns:    4;
+
+// Colors
+$brand-primary:         #27ae60;
+$color__text-main:      #292b2c;
+$color__link:           #08364d;
+$color__link--active:   #023853;
+$color__border:         #4e5254;
+
+// Fonts
+$montserrat: 'Montserrat', 'Helvetica', sans-serif;
+$raleway: 'Raleway', 'Helvetica', sans-serif;
+$body-font: $montserrat;
+$header-font: $montserrat;
+$caption-font: $raleway;
+$font__main: $body-font;
+$font__line-height-body: 1.5;
+$font__line-height-pre: 1.6;
+$font-size: 16px;

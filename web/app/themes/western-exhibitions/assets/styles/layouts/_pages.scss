@@ -1,0 +1,48 @@
+.artist-thumbnail {
+  width: 100%;
+}
+
+.nav-links {
+  display: inline-flex;
+  width: 100%;
+  div[class*="nav-"] {
+    width: 50%;
+  }
+  .nav-next {
+    text-align: right;
+  }
+}
+
+
+/* Exhibition pages */
+
+.l-gallery-item--text {
+  width: 100%;
+}
+
+.l-gallery-title {
+  border-bottom: 1px solid $color__border;
+  font-weight: bold;
+}
+
+.grid:after {
+  content: '';
+  display: block;
+  clear: both;
+}
+
+/* ---- .grid-item ---- */
+
+.grid-sizer,
+.grid-item {
+  width: 33.333%;
+}
+
+.grid-item {
+  float: left;
+}
+
+.grid-item img {
+  display: block;
+  width: 100%;
+}

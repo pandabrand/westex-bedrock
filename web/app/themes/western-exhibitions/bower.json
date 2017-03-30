@@ -1,0 +1,27 @@
+{
+  "name": "sage",
+  "homepage": "https://roots.io/sage/",
+  "authors": [
+    "Ben Word <ben@benword.com>"
+  ],
+  "license": "MIT",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "git://github.com/twbs/bootstrap.git#v4.0.0-alpha.6",
+    "tether": "^1.4.0",
+    "masonry": "^4.1.1",
+    "imagesloaded": "^4.1.1",
+    "fancybox": "^3.0.47"
+  },
+  "overrides": {
+    "masonry": {
+      "main": "./dist/masonry.pkgd.min.js"
+    },
+    "fancybox": {
+      "main" : [
+        "./dist/jquery.fancybox.min.js",
+        "./dist/jquery.fancybox.min.css"
+      ]
+    }
+  }
+}

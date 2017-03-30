@@ -1,0 +1,9 @@
+.c-footer-icons {
+  padding: 0;
+  .c-footer-icon-item {
+    margin: 0 10px;
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+}

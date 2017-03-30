@@ -1,0 +1,23 @@
+.l-front-gallery_row {
+  margin-bottom: 2rem;
+  &:hover {
+    cursor: pointer;
+  }
+  .c-front-gallery_h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+  }
+}
+
+.c-front-gallery_smalltype {
+  font-size: .75rem;
+}
+
+.l-front-page_content {
+  margin: 3rem 0;
+}
+
+.l-front-page_upcoming-exhibition {
+  border-top: $color__border 1px solid;
+  padding: 1rem 0;
+}

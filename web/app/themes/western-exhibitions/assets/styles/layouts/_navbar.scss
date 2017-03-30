@@ -1,0 +1,22 @@
+.l-main-navbar {
+  padding: 1rem;
+}
+
+.l-main-nav {
+  margin-left: 1rem;
+  .menu-item {
+    margin: 0 2rem;
+    .dropdown-toggle:after {
+      display: none;
+    }
+    .dropdown-menu {
+      border: none;
+    }
+    .nav-link {
+      color: $color__link;
+      &.active {
+        color: $color__link--active;
+      }
+    }
+  }
+}

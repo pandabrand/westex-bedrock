@@ -1,0 +1,41 @@
+body,
+button,
+input,
+select,
+textarea {
+	color: $color__text-main;
+	font-family: $font__main;
+	font-size: $font-size;
+	line-height: $font__line-height-body;
+}
+
+a {
+  color: $color__link;
+  &:hover, &:active {
+    color: $color__link--active;
+  }
+  &:visited {
+    color: $color__link;
+  }
+}
+
+.strong {
+  font-weight: bold;
+}
+
+.u-smalltext {
+  font-size: .7em;
+}
+
+.u-caption {
+  font-family: $caption-font;
+  text-align: right;
+}
+
+.u-extra-v-margin {
+  margin: 2rem 0;
+}
+
+.u-titlecase {
+  text-transform: capitalize;
+}
