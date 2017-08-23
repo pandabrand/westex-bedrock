@@ -3,21 +3,21 @@
     <?php
       $artists = get_field('artist');
       $artist_name = '';
-      if($artists) {
-        foreach($artists as $artist) {
+      if($artists):
+        foreach($artists as $artist):
           $artist_name .= $artist->post_title.' ';
-        }
-      }
+        endforeach;
+      endif;
     ?>
     <header>
-      <h1 class="entry-title"><?php echo $artist_name,get_the_title(); ?></h1>
+      <div class="entry-title h3"><?php echo $artist_name,' ',get_the_title(); ?></div>
     </header>
     <div class="entry-content">
-      <?php the_content(); ?>
-      <div class=""><?php the_field('location_title'); ?></div>
-      <div class=""><?php the_field('location'); ?></div>
+      <div class=""><?php the_field('location_name'); ?></div>
+      <div class=""><?php the_field('location_address'); ?></div>
       <div class=""><?php the_field('start_date'); ?> <?php echo (get_field('end_date')) ? '- ' : '' ?> <?php the_field('end_date'); ?></div>
       <div class=""><a href="<?php echo get_field('location_url'); ?>" target="_blank">Link</a></div>
+      <?php the_content(); ?>
     </div>
     <footer>
       <div class="">

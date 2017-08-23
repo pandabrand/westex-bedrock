@@ -5,7 +5,10 @@
   }
   .c-front-gallery_h1 {
     font-size: 1.5rem;
-    font-weight: bold;
+    font-family: $header-font;
+  }
+  p {
+    margin-bottom: .25rem;
   }
 }
 

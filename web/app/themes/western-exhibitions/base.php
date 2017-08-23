@@ -21,6 +21,9 @@ use Roots\Sage\Wrapper;
     <div class="wrap container" role="document">
       <div class="content row">
         <main class="main">
+          <!-- <pre> -->
+            <!-- <?php echo $GLOBALS['wp_query']->request; ?> -->
+          <!-- </pre> -->
           <?php include Wrapper\template_path(); ?>
         </main><!-- /.main -->
         <?php if (Setup\display_sidebar()) : ?>

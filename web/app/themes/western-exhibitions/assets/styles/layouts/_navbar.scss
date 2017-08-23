@@ -1,5 +1,10 @@
+.l-main-navbar-wrapper {
+  flex-direction: row-reverse;
+}
+
 .l-main-navbar {
-  padding: 1rem;
+  padding: 1rem 0;
+  font-family: $caption-font;
 }
 
 .l-main-nav {
@@ -14,9 +19,13 @@
     }
     .nav-link {
       color: $color__link;
+      padding-right: 0;
       &.active {
         color: $color__link--active;
       }
+    }
+    &:last-child {
+      margin: 0 0 0 2rem;
     }
   }
 }

@@ -24,9 +24,50 @@ function add_query_vars_filter( $vars ){
 add_filter( 'query_vars', 'add_query_vars_filter' );
 
 function wpsites_query( $query ) {
+  if(is_admin() || !$query->is_main_query()) {
+    return;
+  }
+
+  if( is_home() ) {
+    $today = date('Ymd');
+    $query->set('meta_query', array(
+      'relation' => 'OR',
+      array(
+        'key' => 'web_display_start_date',
+        'compare' => '<=',
+        'value' => $today,
+      ),
+      array(
+        'relation' => 'AND',
+        array(
+          'key'     => 'start_date',
+          'compare' => 'EXISTS'
+        ),
+        array(
+          'key'     => 'web_display_start_date',
+          'compare' => 'NOT EXISTS',
+        ),
+      ),
+      array(
+        'relation' => 'AND',
+        array(
+          'key'     => 'start_date',
+          'compare' => 'NOT EXISTS'
+        ),
+        array(
+          'key'     => 'web_display_start_date',
+          'compare' => 'NOT EXISTS',
+        ),
+      ),
+    ));
+    $query->set( 'posts_per_page', 12 );
+    $query->set('orderby', 'meta_value_num post_date');
+  }
+
   if ( $query->is_archive() && $query->is_main_query() && !is_admin() ) {
     $query->set( 'posts_per_page', 12 );
-    if(isset($query->query_vars['post_type']) && $query->query_vars['post_type'] == 'press') {
+
+    if(is_post_type_archive('press')) {
       $meta_query_val = get_query_var('artist_press');
       $meta_query = array();
       if($meta_query_val) {
@@ -37,21 +78,37 @@ function wpsites_query( $query ) {
           'value' => $artist_post_id,
           'compare' => 'IN'
         );
-      } else {
-        $meta_query = array(
-          'key' => 'gallery_press',
-          'value' => '1',
-          'compare' => '=='
+        $filter = array(
+          'meta_query' => array(
+            $meta_query,
+          )
         );
+        $query->set('meta_query', $filter);
       }
-      $filter = array(
-        'meta_query' => array(
-          $meta_query,
-        )
-      );
-      $query->set('meta_query', $filter);
+      //  else {
+      //   $meta_query = array(
+      //     'key' => 'gallery_press',
+      //     'value' => '1',
+      //     'compare' => '=='
+      //   );
+      // }
+    }
+    if(is_post_type_archive('artist')) {
+      $query->set('posts_per_page', -1 );
+      $query->set('meta_key', 'artist_sort_order');
+      $query->set('orderby', 'meta_value_num');
+      $query->set('order', 'ASC');
+      return;
+    }
+
+    if(is_post_type_archive( 'art_fair' )) {
+      $query->set('meta_key', 'start_date');
+      $query->set('orderby', 'meta_value_num');
+      $query->set('order', 'DESC');
+      return;
     }
   }
+  return $query;
 }
 add_action( 'pre_get_posts', 'wpsites_query' );
 
@@ -69,23 +126,33 @@ function theme_slug_fonts_url() {
   * supported by Lora, translate this to 'off'. Do not translate
   * into your own language.
   */
-  $montserrat = _x( 'on', 'Montserrat font: on or off', 'theme-slug' );
+  $gentium = _x( 'on', 'Gentium font: on or off', 'theme-slug' );
 
   /* Translators: If there are characters in your language that are not
   * supported by Open Sans, translate this to 'off'. Do not translate
   * into your own language.
   */
   $raleway = _x( 'on', 'Raleway font: on or off', 'theme-slug' );
+  $sanchez = _x( 'off', 'Sanchez font: on or off', 'theme-slug' );
+  $lato = _x( 'on', 'Lato font: on or off', 'theme-slug' );
 
-  if ( 'off' !== $montserrat || 'off' !== $raleway ) {
+  if ( 'off' !== $gentium || 'off' !== $raleway || 'off' !== $sanchez || 'off' !== $lato) {
     $font_families = array();
 
-    if ( 'off' !== $montserrat ) {
-      $font_families[] = 'Montserrat:400,700,400italic';
+    if ( 'off' !== $gentium ) {
+      $font_families[] = 'Gentium+Book+Basic:400,700,400italic';
     }
 
     if ( 'off' !== $raleway ) {
       $font_families[] = 'Raleway:400';
+    }
+
+    if ( 'off' !== $sanchez ) {
+      $font_families[] = 'Sanchez:400';
+    }
+
+    if ( 'off' !== $lato ) {
+      $font_families[] = 'Lato:400,700';
     }
 
     $query_args = array(
@@ -113,3 +180,44 @@ function theme_slug_custom_header_fonts() {
   wp_enqueue_style( 'theme-slug-fonts', theme_slug_fonts_url(), array(), null );
 }
 add_action( 'admin_print_styles-appearance_page_custom-header', 'theme_slug_custom_header_fonts' );
+
+function westex_change_post_label() {
+    global $menu;
+    global $submenu;
+    $menu[5][0] = 'News';
+    $submenu['edit.php'][5][0] = 'News';
+    $submenu['edit.php'][10][0] = 'Add News';
+    $submenu['edit.php'][16][0] = 'News Tags';
+}
+
+function westex_change_post_object() {
+    global $wp_post_types;
+    $labels = &$wp_post_types['post']->labels;
+    $labels->name = 'News';
+    $labels->singular_name = 'News';
+    $labels->add_new = 'Add News';
+    $labels->add_new_item = 'Add News';
+    $labels->edit_item = 'Edit News';
+    $labels->new_item = 'News';
+    $labels->view_item = 'View News';
+    $labels->search_items = 'Search News';
+    $labels->not_found = 'No News found';
+    $labels->not_found_in_trash = 'No News found in Trash';
+    $labels->all_items = 'All News';
+    $labels->menu_name = 'News';
+    $labels->name_admin_bar = 'News';
+}
+
+add_action( 'admin_menu', 'westex_change_post_label' );
+add_action( 'init', 'westex_change_post_object' );
+
+// add_action('pmxi_update_post_meta', 'westex_update_post_meta', 10, 3);
+//
+// function westex_update_post_meta($pid, $m_key, $m_value) {
+//   if ( $m_key == 'artist') {
+//     update_field($m_key, unserialize($m_value)[0], $pid);
+//   }
+// }
+add_filter('acf/settings/google_api_key', function ($value) {
+  return 'AIzaSyDVr4MUpJD6uo1krCkrM96G6fAAPPTki2U';
+});

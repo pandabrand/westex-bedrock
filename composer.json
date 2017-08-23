@@ -40,6 +40,10 @@
       "url": "packages/enhanced-media-library-pro"
     },
     {
+      "type": "path",
+      "url": "packages/all-in-one-wp-migration"
+    },
+    {
       "type": "vcs",
       "url": "https://github.com/pandabrand/western-exhibitions.git"
     },
@@ -61,7 +65,9 @@
     "wpackagist-plugin/regenerate-thumbnails": "dev-trunk",
     "wpackagist-plugin/wp-all-import": "dev-trunk",
     "soflyy/wpai-acf-add-on":"*",
-    "wpackagist-plugin/ninja-forms": "v3.0.31"
+    "wpackagist-plugin/ninja-forms": "v3.0.31",
+    "servmask/all-in-one-wp-migration":"*",
+    "wpackagist-plugin/video-embed-thumbnail-generator": "4.6.17"
   },
   "require-dev": {
     "squizlabs/php_codesniffer": "^2.5.1"

@@ -29,7 +29,7 @@
         // JavaScript to be fired on the home page
         $('.jsExhibitonLink').click(function() {
           var exhibition_link = this.getAttribute('data-url');
-          window.location.href = exhibition_link;
+          window.open(exhibition_link, '_blank');
         });
       },
       finalize: function() {
@@ -49,12 +49,17 @@
           percentPosition: true,
           columnWidth: '.grid-sizer'
         });
-        // $grid.imagesLoaded( function() {
-        // });
+        $grid.imagesLoaded().progress( function() {
+          $grid.masonry('layout');
+        });
+
         $("[data-fancybox]").fancybox({
-        		thumbs: false,
-            slideshow: false,
-            protect: true
+            protect: true,
+            buttons: true,
+            thumbs: true,
+            caption : function( instance, item ) {
+              return $(this).find('label').html();
+            },
         });
       }
     }

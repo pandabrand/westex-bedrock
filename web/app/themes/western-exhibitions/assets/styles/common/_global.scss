@@ -9,6 +9,10 @@ textarea {
 	line-height: $font__line-height-body;
 }
 
+address {
+  font-family: $caption-font;
+}
+
 a {
   color: $color__link;
   &:hover, &:active {
@@ -23,8 +27,16 @@ a {
   font-weight: bold;
 }
 
+.emphasis {
+  font-style: italic;
+}
+
 .u-smalltext {
   font-size: .7em;
+}
+
+.u-label-font {
+  font-family: $caption-font !important;
 }
 
 .u-caption {
@@ -38,4 +50,43 @@ a {
 
 .u-titlecase {
   text-transform: capitalize;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: $header-font;
+}
+
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: $header-font;
+  font-weight: normal;
+}
+
+.h1 {
+  div.page-header & {
+    font-family: $caption-font;
+  }
+}
+
+.h1 {
+  font-size: 1.728rem;
+}
+
+.h2 {
+  font-size: 1.44rem;
+}
+
+.h3 {
+  font-size: 1.2rem;
+}
+
+.h4 {
+  font-size: 1rem;
+}
+
+.h5 {
+  font-size: .833rem;
+}
+
+.h6 {
+  font-size: 694rem;
 }

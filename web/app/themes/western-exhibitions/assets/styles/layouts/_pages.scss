@@ -22,7 +22,7 @@
 
 .l-gallery-title {
   border-bottom: 1px solid $color__border;
-  font-weight: bold;
+  font-family: $caption-font;
 }
 
 .grid:after {
@@ -45,4 +45,11 @@
 .grid-item img {
   display: block;
   width: 100%;
+}
+
+/* ---- fancybox ---- */
+.we-fancybox-anchor {
+  .we-fancybox-label {
+    display: none;
+  }
 }

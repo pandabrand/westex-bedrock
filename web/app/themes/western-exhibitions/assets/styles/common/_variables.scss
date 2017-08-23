@@ -12,11 +12,14 @@ $color__link--active:   #023853;
 $color__border:         #4e5254;
 
 // Fonts
-$montserrat: 'Montserrat', 'Helvetica', sans-serif;
+// $montserrat: 'Montserrat', 'Helvetica', sans-serif;
 $raleway: 'Raleway', 'Helvetica', sans-serif;
-$body-font: $montserrat;
-$header-font: $montserrat;
-$caption-font: $raleway;
+$sanchez: 'Sanchez', 'Rockwell', 'Courier Bold', Courier, Georgia, Times, 'Times New Roman', serif;
+$gentium: 'Gentium Book Basic', 'Goudy Old Style', Garamond, 'Big Caslon', 'Times New Roman', serif;
+$lato: 'Lato', 'Helvetica', sans-serif;
+$body-font: $gentium;
+$header-font: $gentium;
+$caption-font: $lato;
 $font__main: $body-font;
 $font__line-height-body: 1.5;
 $font__line-height-pre: 1.6;

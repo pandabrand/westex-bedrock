@@ -1,6 +1,6 @@
-<article <?php post_class('u-extra-v-margin'); ?>>
+<article <?php post_class('my-4'); ?>>
   <div class="entry-summary">
-    <div class="c-link h5">
+    <div class="c-link h3">
       <?php if(get_field('publication_link')): ?>
         <a href="<?php the_field('publication_link'); ?>"><?php the_title(); ?></a>
       <?php else: ?>

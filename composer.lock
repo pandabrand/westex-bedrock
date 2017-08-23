@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "bc5cddc5c12d4ee2e4180dd2cbd51302",
+    "content-hash": "c296c1e5c5a359508ef7cb745a4a55e4",
     "packages": [
         {
             "name": "composer/installers",
@@ -208,16 +208,16 @@
         },
         {
             "name": "oscarotero/env",
-            "version": "v1.0.2",
+            "version": "v1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/oscarotero/env.git",
-                "reference": "0819fd764ca19ab880b8d9ed7a95ae4910f98f20"
+                "reference": "0f676e41d758fa984806c32e27f0cf7afa63d8db"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/oscarotero/env/zipball/0819fd764ca19ab880b8d9ed7a95ae4910f98f20",
-                "reference": "0819fd764ca19ab880b8d9ed7a95ae4910f98f20",
+                "url": "https://api.github.com/repos/oscarotero/env/zipball/0f676e41d758fa984806c32e27f0cf7afa63d8db",
+                "reference": "0f676e41d758fa984806c32e27f0cf7afa63d8db",
                 "shasum": ""
             },
             "require": {
@@ -246,7 +246,7 @@
             "keywords": [
                 "env"
             ],
-            "time": "2016-05-08T17:14:32+00:00"
+            "time": "2017-07-17T20:41:59+00:00"
         },
         {
             "name": "pandabrand/western-exhibitions",
@@ -290,7 +290,7 @@
                 "source": "https://github.com/pandabrand/western-exhibitions/tree/master",
                 "issues": "https://github.com/pandabrand/western-exhibitions/issues"
             },
-            "time": "2017-03-22T19:30:22+00:00"
+            "time": "2017-08-23T15:43:00+00:00"
         },
         {
             "name": "roots/wp-password-bcrypt",
@@ -348,6 +348,21 @@
                 "wordpress wp bcrypt password"
             ],
             "time": "2016-03-01T16:27:06+00:00"
+        },
+        {
+            "name": "servmask/all-in-one-wp-migration",
+            "version": "6.42",
+            "dist": {
+                "type": "path",
+                "url": "packages/all-in-one-wp-migration",
+                "reference": "15365d99eea1666a4aca2b7a7207805129274468",
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0.12",
+                "php": ">=5.3.2"
+            },
+            "type": "wordpress-plugin"
         },
         {
             "name": "soflyy/wpai-acf-add-on",
@@ -471,6 +486,26 @@
             "time": "2016-07-29T01:41:13+00:00"
         },
         {
+            "name": "wpackagist-plugin/video-embed-thumbnail-generator",
+            "version": "4.6.17",
+            "source": {
+                "type": "svn",
+                "url": "https://plugins.svn.wordpress.org/video-embed-thumbnail-generator/",
+                "reference": "tags/4.6.17"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://downloads.wordpress.org/plugin/video-embed-thumbnail-generator.4.6.17.zip",
+                "reference": null,
+                "shasum": null
+            },
+            "require": {
+                "composer/installers": "~1.0"
+            },
+            "type": "wordpress-plugin",
+            "homepage": "https://wordpress.org/plugins/video-embed-thumbnail-generator/"
+        },
+        {
             "name": "wpackagist-plugin/wp-all-import",
             "version": "dev-trunk",
             "source": {
@@ -495,16 +530,16 @@
     "packages-dev": [
         {
             "name": "squizlabs/php_codesniffer",
-            "version": "2.8.1",
+            "version": "2.9.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/squizlabs/PHP_CodeSniffer.git",
-                "reference": "d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d"
+                "reference": "dcbed1074f8244661eecddfc2a675430d8d33f62"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d",
-                "reference": "d7cf0d894e8aa4c73712ee4a331cc1eaa37cdc7d",
+                "url": "https://api.github.com/repos/squizlabs/PHP_CodeSniffer/zipball/dcbed1074f8244661eecddfc2a675430d8d33f62",
+                "reference": "dcbed1074f8244661eecddfc2a675430d8d33f62",
                 "shasum": ""
             },
             "require": {
@@ -569,7 +604,7 @@
                 "phpcs",
                 "standards"
             ],
-            "time": "2017-03-01T22:17:45+00:00"
+            "time": "2017-05-22T02:43:20+00:00"
         }
     ],
     "aliases": [],

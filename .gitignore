@@ -18,3 +18,7 @@ web/.htaccess
 # Composer
 vendor/*
 !vendor/.gitkeep
+
+web/app/ai1wm-backups/*
+**/.DS_Store
+**/*.zip

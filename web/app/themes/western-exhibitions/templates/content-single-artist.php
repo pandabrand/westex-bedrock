@@ -1,7 +1,7 @@
 <?php while (have_posts()) : the_post(); ?>
   <article <?php post_class(); ?>>
     <header>
-      <h1 class="entry-title"><?php the_title(); ?></h1>
+      <div class="entry-title h1"><?php the_title(); ?></div>
       <?php
         $born_details = have_rows('born_details');
         if($born_details):
@@ -32,19 +32,11 @@
               <?php if($images): ?>
                 <div class="grid">
                   <div class="grid-sizer"></div>
-                  <?php foreach($images as $image): ?>
-                    <?php $gallery_string = str_replace(PHP_EOL, '', $image['title'].' '.$image['description']); ?>
-                    <div class="grid-item p-2">
-                      <div class="l-gallery-item">
-                        <a href="<?php echo $image['sizes']['large']; ?>" data-fancybox="gallery-images" data-caption="<?php echo $gallery_string; ?>">
-                          <img class="img-fluid" src="<?php echo $image['sizes']['medium'];?>" />
-                          <div class="l-gallery-item--text u-smalltext mx-auto">
-                            <?php echo $gallery_string; ?>
-                          </div>
-                        </a>
-                      </div>
-                    </div>
-                  <?php endforeach; ?>
+                  <?php
+                    foreach($images as $image):
+                      include(locate_template('templates/we-fancybox.php', false , false));
+                    endforeach;
+                  ?>
                 </div>
               <?php endif; ?>
             </div>

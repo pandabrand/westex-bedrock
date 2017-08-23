@@ -3,21 +3,39 @@
   $args = array(
     'numberofposts' => 3,
     'post_type' => ['exhibition'],
-    'orderby' => 'gallery_location',
-    'order' => 'ASC',
+    // 'orderby' => 'gallery_location',
+    // 'order' => 'ASC',
     'meta_query' => array(
       'relation' => 'AND',
-      array(
-        'key' => 'start_date',
+      'start_date_clause' => array(
+        'key' => 'display_start_date',
         'compare' => '<=',
         'value' => $today,
       ),
-      array(
-        'key' => 'end_date',
+      'end_date_clause' => array(
+        'key' => 'display_end_date',
         'compare' => '>=',
         'value' => $today,
+      ),
+      array(
+        'relation' => 'OR',
+        array(
+          'key' => 'off-site_exhibition',
+          'compare' => 'EXISTS',
+          'value' => ''
+        ),
+        array(
+          'key' => 'off-site_exhibition',
+          'compare' => '==',
+          'value' => '0',
+        )
+      ),
+      'gallery_location_clause' => array(
+        'key' => 'gallery_location',
+        'compare' => 'EXISTS'
       )
-    )
+    ),
+    'orderby' => array('gallery_location_clause' => 'ASC'),
   );
   $front_query = new WP_Query($args);
 ?>
@@ -33,6 +51,7 @@
       </div>
       <div class="col-md-6">
         <?php get_template_part('templates/content-front_upcoming'); ?>
+        <?php get_template_part('templates/content-front_upcoming-art-fair'); ?>
       </div>
     </div>
   </div>
