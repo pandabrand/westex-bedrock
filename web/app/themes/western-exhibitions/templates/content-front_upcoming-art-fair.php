@@ -1,16 +1,18 @@
 <?php
-  $week_from_today = date('Ymd', strtotime('+1 week'));
+  $today = date('Ymd');
   $args = array(
     'numberofposts' => 3,
     'post_type' => ['art_fair'],
     'meta_query' => array(
       array(
         'key' => 'start_date',
-        'compare' => '<=',
-        'value' => $week_from_today,
+        'compare' => '>=',
+        'value' => $today,
       ),
     ),
-    'orderby' => array('start_date' => 'ASC'),
+    'orderby' => 'meta_value',
+    'meta_key' => 'start_date',
+    'order' => 'ASC'
   );
   $art_fair_query = new WP_Query($args);
 ?>

@@ -14,24 +14,11 @@
           endif;
         ?>
       </div>
-      <div class="mb-2">
+      <div class="">
         <?php
           $location = get_field('location');
           echo $location['address'];
         ?>
-      </div>
-      <?php
-        $booth = get_field('booth');
-        if( $booth ):
-      ?>
-        <div class="mb-2 c-front-gallery_smalltype u-label-font">
-          <?php echo $booth; ?>
-        </div>
-      <?php endif; ?>
-      <div class="l-exhibition-featured-image mb-5">
-        <?php $alt_string = str_replace(PHP_EOL, '', get_the_title(get_post_thumbnail_id()).' '.get_post(get_post_thumbnail_id())->post_content); ?>
-        <?php the_post_thumbnail('full', array('class' => 'img-fluid', 'alt' => $alt_string)); ?>
-        <div class="u-smalltext u-caption text-right"><?php echo str_replace(PHP_EOL, '', get_the_title(get_post_thumbnail_id()).' '.get_post(get_post_thumbnail_id())->post_content); ?></div>
       </div>
       <div class="d-flex flex-wrap">
         <?php
@@ -48,6 +35,19 @@
             endwhile;
           endif;
         ?>
+      </div>
+      <?php
+        $booth = get_field('booth');
+        if( $booth ):
+      ?>
+        <div class="my-2 c-front-gallery_smalltype u-label-font">
+          <?php echo $booth; ?>
+        </div>
+      <?php endif; ?>
+      <div class="l-exhibition-featured-image mb-5">
+        <?php $alt_string = str_replace(PHP_EOL, '', get_the_title(get_post_thumbnail_id()).' '.get_post(get_post_thumbnail_id())->post_content); ?>
+        <?php the_post_thumbnail('full', array('class' => 'img-fluid', 'alt' => $alt_string)); ?>
+        <div class="u-smalltext u-caption text-right"><?php echo str_replace(PHP_EOL, '', get_the_title(get_post_thumbnail_id()).' '.get_post(get_post_thumbnail_id())->post_content); ?></div>
       </div>
       <?php the_content(); ?>
     </div>

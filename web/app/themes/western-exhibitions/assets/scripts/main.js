@@ -58,9 +58,11 @@
             buttons: true,
             thumbs: true,
             caption : function( instance, item ) {
-              return $(this).find('label').html();
+              var _label = $(this).find('label').html();
+              return _label;
             },
         });
+
       }
     }
   };

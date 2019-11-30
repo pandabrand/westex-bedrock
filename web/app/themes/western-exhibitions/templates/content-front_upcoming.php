@@ -11,7 +11,7 @@
       )
     ),
     'meta_query' => array(
-      array(
+      'display_start_date_clause' => array(
         'key' => 'display_start_date',
         'compare' => '>',
         'value' => $today,
@@ -26,7 +26,7 @@
         'compare' => 'EXISTS'
       )
     ),
-    'orderby' => array('gallery_location_clause' => 'ASC', 'display_start_date' => 'ASC'),
+    'orderby' => array('display_start_date_clause' => 'ASC', 'gallery_location_clause' => 'ASC'),
   );
   $gallery_query = new WP_Query($args);
 ?>

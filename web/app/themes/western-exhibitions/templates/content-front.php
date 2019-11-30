@@ -47,6 +47,15 @@
   <div class="container">
     <div class="row">
       <div class="col-md-6">
+        <?php if(get_field('show_notice')): ?>
+          <div class="row">
+            <div class="col-md-6">
+              <div class="wx-border p-2">
+                <?php the_field('notice'); ?>
+              </div>
+            </div>
+          </div>
+        <?php endif; ?>
         <?php the_content(); ?>
       </div>
       <div class="col-md-6">

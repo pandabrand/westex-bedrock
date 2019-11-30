@@ -6,7 +6,7 @@
       </div>
     <? endif; ?>
       <div>
-        <a href="/press/?artist_press=<?php the_title(); ?>">Press</a>
+        <a href="/press/?artist_press=<?php echo get_the_id(); ?>">Press</a>
       </div>
   </div>
 <?php endif; ?>
@@ -17,9 +17,8 @@
         <?php
           $meta_query_val = get_query_var('artist_press');
           if($meta_query_val) {
-            $artist_post = get_page_by_title($meta_query_val, OBJECT, 'artist');
-            $artist_title = $artist_post->post_title;
-            $artist_link = get_permalink($artist_post->ID);
+            $artist_title = get_the_title($meta_query_val);
+            $artist_link = get_permalink($meta_query_val);
             echo 'Back to <a href="'.$artist_link.'">'.$artist_title.'</a>';
           }
         ?>

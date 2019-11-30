@@ -103,8 +103,7 @@
         $args = array(
           'post_type' =>  ['post'],
           'category_name' => 'off-site-exhibition',
-          // 'posts_per_page' => 5,
-          // 'paged' => $paged,
+          'posts_per_page' => 20,
           'meta_query' => array(
             'relation' => 'AND',
             array(
@@ -134,7 +133,7 @@
         $wp_query = new WP_Query($args);
         ?>
         <div class="col-md-6 pr-0">
-          <div class="h2 mb-4 u-label-font">Current and Upcoming Exhibition Off-Site</div>
+          <div class="h2 mb-4 u-label-font">Current and Upcoming Exhibitions Off-Site</div>
           <?php while ($wp_query->have_posts()) : $wp_query->the_post(); ?>
             <div class="l-front-gallery_row jsExhibitonLink" data-url="<?php the_field('location_url'); ?>" data-title="<?php the_title(); ?>">
               <?php $artists = get_field('artist'); ?>

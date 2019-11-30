@@ -71,11 +71,9 @@ function wpsites_query( $query ) {
       $meta_query_val = get_query_var('artist_press');
       $meta_query = array();
       if($meta_query_val) {
-        $artist_post = get_page_by_title($meta_query_val, OBJECT, 'artist');
-        $artist_post_id = $artist_post->ID;
         $meta_query = array(
           'key' => 'artist_press',
-          'value' => $artist_post_id,
+          'value' => $meta_query_val,
           'compare' => 'IN'
         );
         $filter = array(

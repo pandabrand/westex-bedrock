@@ -6,8 +6,7 @@
     <?php
       $meta_query_val = get_query_var('artist_press');
       if($meta_query_val) {
-        $artist_post = get_page_by_title($meta_query_val, OBJECT, 'artist');
-        $artist_title = $artist_post->post_title;
+        $artist_title = get_the_title($meta_query_val);
         echo '<div class="h3">'.$artist_title.'</div>';
       }
     ?>
