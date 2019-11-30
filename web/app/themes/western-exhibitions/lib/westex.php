@@ -217,5 +217,5 @@ add_action( 'init', 'westex_change_post_object' );
 //   }
 // }
 add_filter('acf/settings/google_api_key', function ($value) {
-  return 'AIzaSyDVr4MUpJD6uo1krCkrM96G6fAAPPTki2U';
+  return GOOGLE_API_KEY;
 });
