@@ -35,7 +35,7 @@
       <div class="row">
         <div class="col-md-6 pl-0">
           <div class="h2 mb-4 u-label-font">Upcoming Exhibitions On-Site</div>
-          <?php while ($wp_query->have_posts()) : $wp_query->the_post(); ?>
+          <?php while (have_posts()) : the_post(); ?>
             <div class="l-front-gallery_row jsExhibitonLink" data-url="<?php the_permalink(); ?>" data-title="<?php the_title(); ?>">
               <div class="c-front-gallery_smalltype u-label-font"><?php
                     $location = get_the_terms( get_the_ID(), 'location');

@@ -1,4 +1,4 @@
-<div class="d-flex flex-column">
+<div class="d-flex flex-column mb-2 wex-flex-basis">
   <div class="h2"><a href="<?php echo the_permalink(); ?>" rel="follow"><?php the_title(); ?></a></div>
   <div class="u-smalltext u-label-font">
     <?php

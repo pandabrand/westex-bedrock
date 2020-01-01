@@ -79,6 +79,7 @@ add_action('widgets_init', __NAMESPACE__ . '\\widgets_init');
  */
 function display_sidebar() {
   static $display;
+  $meta_query_val = get_query_var('artist_filter');
 
   isset($display) || $display = !in_array(true, [
     // The sidebar will NOT be displayed if ANY of the following return true.
@@ -87,7 +88,8 @@ function display_sidebar() {
     is_front_page(),
     is_page_template('template-custom.php'),
     is_page_template('template-current_exhibitions.php'),
-    is_page_template('template-previous_exhibitions.php'),
+    (is_page_template('template-previous_exhibitions.php') && empty($meta_query_val)),
+    // is_page_template('template-previous_exhibitions.php'),
     is_page_template('template-upcoming_exhibitions.php'),
     is_post_type_archive(array('artist')),
     is_singular(array('exhibition'))

@@ -31,9 +31,9 @@
   );
   $front_query = new WP_Query($args);
 ?>
-<?php if($front_query->have_posts()): ?>
+<?php if(have_posts()): ?>
   <div class="container">
-    <?php while ($front_query->have_posts()): $front_query->the_post(); ?>
+    <?php while (have_posts()): the_post(); ?>
       <div class="row l-front-gallery_row jsExhibitonLink" data-url="<?php the_permalink(); ?>" data-title="<?php the_title(); ?>">
         <div class="col-md-6">
           <div class="c-front-gallery_smalltype u-label-font"><?php

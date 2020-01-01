@@ -10,6 +10,14 @@
   p {
     margin-bottom: .25rem;
   }
+
+  .col-md-12 {
+    &:first-of-type {
+      .h2 {
+        margin-top: 1em;
+      }
+    }
+  }
 }
 
 .c-front-gallery_smalltype {

@@ -29,7 +29,7 @@
         // JavaScript to be fired on the home page
         $('.jsExhibitonLink').click(function() {
           var exhibition_link = this.getAttribute('data-url');
-          window.open(exhibition_link, '_blank');
+          window.open(exhibition_link, '_self');
         });
       },
       finalize: function() {

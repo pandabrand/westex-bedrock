@@ -22,3 +22,4 @@ vendor/*
 web/app/ai1wm-backups/*
 **/.DS_Store
 **/*.zip
+**/*.log

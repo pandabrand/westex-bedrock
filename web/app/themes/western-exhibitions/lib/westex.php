@@ -1,5 +1,7 @@
 <?php
 
+use Roots\Sage\Extras;
+
 add_filter( 'get_the_archive_title', function ($title) {
 
 if (is_post_type_archive() /*artist' == get_post_type()*/ ) {
@@ -18,7 +20,7 @@ add_action( 'wp_enqueue_scripts', 'westex_scripts' );
 
 
 function add_query_vars_filter( $vars ){
-  $vars[] = "artist_press";
+  $vars[] = "artist_filter";
   return $vars;
 }
 add_filter( 'query_vars', 'add_query_vars_filter' );
@@ -68,7 +70,7 @@ function wpsites_query( $query ) {
     $query->set( 'posts_per_page', 12 );
 
     if(is_post_type_archive('press')) {
-      $meta_query_val = get_query_var('artist_press');
+      $meta_query_val = get_query_var('artist_filter');
       $meta_query = array();
       if($meta_query_val) {
         $meta_query = array(
@@ -83,14 +85,8 @@ function wpsites_query( $query ) {
         );
         $query->set('meta_query', $filter);
       }
-      //  else {
-      //   $meta_query = array(
-      //     'key' => 'gallery_press',
-      //     'value' => '1',
-      //     'compare' => '=='
-      //   );
-      // }
     }
+
     if(is_post_type_archive('artist')) {
       $query->set('posts_per_page', -1 );
       $query->set('meta_key', 'artist_sort_order');
@@ -100,11 +96,28 @@ function wpsites_query( $query ) {
     }
 
     if(is_post_type_archive( 'art_fair' )) {
+      $meta_query_val = get_query_var('artist_filter');
+      $meta_query = array();
+      if($meta_query_val) {
+        $meta_query = array(
+          'key' => 'western_exhibitions_artists',
+          'value' => $meta_query_val,
+          'compare' => 'LIKE'
+        );
+        $filter = array(
+          'meta_query' => array(
+            $meta_query,
+          )
+        );
+        $query->set('meta_query', $filter);
+      }
+
       $query->set('meta_key', 'start_date');
       $query->set('orderby', 'meta_value_num');
       $query->set('order', 'DESC');
-      return;
+      // return;
     }
+
   }
   return $query;
 }
@@ -219,3 +232,11 @@ add_action( 'init', 'westex_change_post_object' );
 add_filter('acf/settings/google_api_key', function ($value) {
   return GOOGLE_API_KEY;
 });
+
+function write_log ( $log )  {
+  if ( is_array( $log ) || is_object( $log ) ) {
+    error_log( print_r( $log, true ) );
+  } else {
+    error_log( $log );
+  }
+}

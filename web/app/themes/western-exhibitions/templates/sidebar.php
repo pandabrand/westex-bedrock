@@ -6,16 +6,19 @@
       </div>
     <? endif; ?>
       <div>
-        <a href="/press/?artist_press=<?php echo get_the_id(); ?>">Press</a>
+        <a href="/press/?artist_filter=<?php echo get_the_id(); ?>">Press</a>
+      </div>
+      <div>
+        <a href="/previous-exhibitions/?artist_filter=<?php echo get_the_id(); ?>">Exhibitions</a>
       </div>
   </div>
 <?php endif; ?>
-<?php if('press' == get_post_type()): ?>
+<?php if('press' == get_post_type() || is_page_template('template-previous_exhibitions.php')): ?>
   <div class="c-sidebar-links u-label-font">
     <div class="c-sidebar-link">
-      <?php if('press' == get_post_type()): ?>
+      <?php if('press' == get_post_type() || is_page_template('template-previous_exhibitions.php')): ?>
         <?php
-          $meta_query_val = get_query_var('artist_press');
+          $meta_query_val = get_query_var('artist_filter');
           if($meta_query_val) {
             $artist_title = get_the_title($meta_query_val);
             $artist_link = get_permalink($meta_query_val);

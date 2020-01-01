@@ -22,7 +22,7 @@ use Roots\Sage\Wrapper;
       <div class="content row">
         <main class="main">
           <!-- <pre> -->
-            <!-- <?php echo $GLOBALS['wp_query']->request; ?> -->
+            <!-- <?php //echo $GLOBALS['wp_query']->request; ?> -->
           <!-- </pre> -->
           <?php include Wrapper\template_path(); ?>
         </main><!-- /.main -->
