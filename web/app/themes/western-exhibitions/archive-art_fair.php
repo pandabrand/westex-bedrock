@@ -8,10 +8,9 @@
 <?php endif; ?>
 
 <div class="container">
-  <div class="row">
-    <?php while (have_posts()) : the_post(); ?>
-      <?php get_template_part('templates/content', get_post_type() != 'post' ? get_post_type() : get_post_format()); ?>
-    <?php endwhile; ?>
-  </div>
+  <?php while (have_posts()) : the_post(); ?>
+    <!-- ?php get_template_part('templates/content', get_post_type() != 'post' ? get_post_type() : get_post_format()); ?  -->
+    <?php get_template_part('templates/content', 'art_fair'); ?>
+  <?php endwhile; ?>
 </div>
 <?php the_posts_navigation(array('prev_text' => 'Next Page', 'next_text' => 'Prev Page')); ?>

@@ -1,39 +1,42 @@
 <?php
-  $today = date('Ymd');
-  $args = array(
-    'numberofposts' => 3,
-    'post_type' => ['exhibition'],
-    // 'orderby' => 'gallery_location',
-    // 'order' => 'ASC',
-    'meta_query' => array(
-      'relation' => 'AND',
-      array(
-        'key' => 'display_start_date',
-        'compare' => '<=',
-        'value' => $today,
-      ),
-      array(
-        'key' => 'display_end_date',
-        'compare' => '>=',
-        'value' => $today,
-      ),
-      array(
-        'key' => 'off-site_exhibition',
-        'compare' => '==',
-        'value' => '0',
-      ),
-      'gallery_location_clause' => array(
-        'key' => 'gallery_location',
-        'compare' => 'EXISTS'
-      )
-    ),
-    'orderby' => array('gallery_location_clause' => 'ASC'),
-  );
-  $front_query = new WP_Query($args);
+  if( false === ( $front_query = get_transient( 'front_current' ) ) ) {
+    $today = date('Ymd');
+    $args = array(
+      'numberofposts' => 3,
+      'post_type' => ['exhibition'],
+      // 'orderby' => 'gallery_location',
+      // 'order' => 'ASC',
+      'meta_query' => array(
+        'relation' => 'AND',
+        array(
+          'key' => 'display_start_date',
+          'compare' => '<=',
+          'value' => $today,
+        ),
+        array(
+          'key' => 'display_end_date',
+          'compare' => '>=',
+          'value' => $today,
+        ),
+        array(
+          'key' => 'off-site_exhibition',
+          'compare' => '==',
+          'value' => '0',
+        ),
+        'gallery_location_clause' => array(
+          'key' => 'gallery_location',
+          'compare' => 'EXISTS'
+          )
+        ),
+        'orderby' => array('gallery_location_clause' => 'ASC'),
+      );
+      $front_query = new WP_Query($args);
+      set_transient( 'front_current', $front_query, 60*60*12 );
+  }
 ?>
-<?php if(have_posts()): ?>
+<?php if($front_query->have_posts()): ?>
   <div class="container">
-    <?php while (have_posts()): the_post(); ?>
+    <?php while ($front_query->have_posts()): $front_query->the_post(); ?>
       <div class="row l-front-gallery_row jsExhibitonLink" data-url="<?php the_permalink(); ?>" data-title="<?php the_title(); ?>">
         <div class="col-md-6">
           <div class="c-front-gallery_smalltype u-label-font"><?php

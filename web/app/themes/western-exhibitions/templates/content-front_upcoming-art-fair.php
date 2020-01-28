@@ -1,20 +1,23 @@
 <?php
   $today = date('Ymd');
-  $args = array(
-    'numberofposts' => 3,
-    'post_type' => ['art_fair'],
-    'meta_query' => array(
-      array(
-        'key' => 'start_date',
-        'compare' => '>=',
-        'value' => $today,
+  if( false === ( $art_fair_query = get_transient( 'front_art_fair' ) ) ) {
+    $args = array(
+      'numberofposts' => 3,
+      'post_type' => ['art_fair'],
+      'meta_query' => array(
+        array(
+          'key' => 'start_date',
+          'compare' => '>=',
+          'value' => $today,
+        ),
       ),
-    ),
-    'orderby' => 'meta_value',
-    'meta_key' => 'start_date',
-    'order' => 'ASC'
-  );
-  $art_fair_query = new WP_Query($args);
+      'orderby' => 'meta_value',
+      'meta_key' => 'start_date',
+      'order' => 'ASC'
+    );
+    $art_fair_query = new WP_Query($args);
+    set_transient( 'front_art_fair', $art_fair_query, 60*60*12 );
+  }
 ?>
 <?php if($art_fair_query->have_posts()): ?>
   <div class="h3">Upcoming Art Fairs</div>

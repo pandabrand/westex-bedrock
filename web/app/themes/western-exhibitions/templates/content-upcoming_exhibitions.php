@@ -1,41 +1,44 @@
 <?php
-  $today = date('Ymd');
-  $args = array(
-    'post_type' => ['exhibition'],
-    'meta_query' => array(
-      'relation' => 'AND',
-      'display_start_date_clause' => array(
-        'key' => 'display_start_date',
-        'compare' => '>',
-        'value' => $today,
-      ),
-      array(
-        'relation' => 'OR',
-        array(
-          'key' => 'off-site_exhibition',
-          'compare' => 'EXISTS',
-          'value' => ''
+  if( false === ( $wp_query = get_transient( 'upcoming_exhibitions_on' ) ) ) {
+    $today = date('Ymd');
+    $args = array(
+      'post_type' => ['exhibition'],
+      'meta_query' => array(
+        'relation' => 'AND',
+        'display_start_date_clause' => array(
+          'key' => 'display_start_date',
+          'compare' => '>',
+          'value' => $today,
         ),
         array(
-          'key' => 'off-site_exhibition',
-          'compare' => '==',
-          'value' => '0',
-        )
-      ),
-      'gallery_location_clause' => array(
-        'key' => 'gallery_location',
-        'compare' => 'EXISTS',
-      )
-    ),
-    'orderby' => array('display_start_date' => 'ASC','gallery_location_clause' => 'ASC')
-  );
-  $wp_query = new WP_Query($args);
+          'relation' => 'OR',
+          array(
+            'key' => 'off-site_exhibition',
+            'compare' => 'EXISTS',
+            'value' => ''
+          ),
+          array(
+            'key' => 'off-site_exhibition',
+            'compare' => '==',
+            'value' => '0',
+            )
+          ),
+          'gallery_location_clause' => array(
+            'key' => 'gallery_location',
+            'compare' => 'EXISTS',
+            )
+          ),
+          'orderby' => array('display_start_date' => 'ASC','gallery_location_clause' => 'ASC')
+        );
+        $wp_query = new WP_Query($args);
+        set_transient( 'upcoming_exhibitions_on', $wp_query, DAY_IN_SECONDS );
+    }
   ?>
     <div class="container">
       <div class="row">
         <div class="col-md-6 pl-0">
           <div class="h2 mb-4 u-label-font">Upcoming Exhibitions On-Site</div>
-          <?php while (have_posts()) : the_post(); ?>
+          <?php while ($wp_query->have_posts()) : $wp_query->the_post(); ?>
             <div class="l-front-gallery_row jsExhibitonLink" data-url="<?php the_permalink(); ?>" data-title="<?php the_title(); ?>">
               <div class="c-front-gallery_smalltype u-label-font"><?php
                     $location = get_the_terms( get_the_ID(), 'location');
@@ -100,37 +103,40 @@
       <?php wp_reset_query(); ?>
       <?php
         $today = date('Ymd');
-        $args = array(
-          'post_type' =>  ['post'],
-          'category_name' => 'off-site-exhibition',
-          'posts_per_page' => 20,
-          'meta_query' => array(
-            'relation' => 'AND',
-            array(
-              'relation' => 'OR',
+        if( false === ( $wp_query = get_transient( 'upcoming_exhibitions_off' ) ) ) {
+          $args = array(
+            'post_type' =>  ['post'],
+            'category_name' => 'off-site-exhibition',
+            'posts_per_page' => 20,
+            'meta_query' => array(
+              'relation' => 'AND',
               array(
+                'relation' => 'OR',
+                array(
+                  'key' => 'web_display_start_date',
+                  'compare' => '>=',
+                  'value' => $today,
+                ),
+                array(
+                  'key' => 'web_display_end_date',
+                  'compare' => '>=',
+                  'value' => $today,
+                ),
+              ),
+              'artist_sort_clause' => array(
+                'key' => 'artist',
+                'compare' => 'EXISTS',
+              ),
+              'web_display_start_date_clause' => array(
                 'key' => 'web_display_start_date',
-                'compare' => '>=',
-                'value' => $today,
+                'compare' => 'EXISTS',
+                )
               ),
-              array(
-                'key' => 'web_display_end_date',
-                'compare' => '>=',
-                'value' => $today,
-              ),
-            ),
-            'artist_sort_clause' => array(
-              'key' => 'artist',
-              'compare' => 'EXISTS',
-            ),
-            'web_display_start_date_clause' => array(
-              'key' => 'web_display_start_date',
-              'compare' => 'EXISTS',
-            )
-          ),
-          'orderby' => array('artist_sort_clause' => 'ASC','web_display_start_date_clause' => 'ASC')
-        );
-        $wp_query = new WP_Query($args);
+              'orderby' => array('artist_sort_clause' => 'ASC','web_display_start_date_clause' => 'ASC')
+            );
+            $wp_query = new WP_Query($args);
+            set_transient( 'upcoming_exhibitions_off', $wp_query, DAY_IN_SECONDS );
+          }
         ?>
         <div class="col-md-6 pr-0">
           <div class="h2 mb-4 u-label-font">Current and Upcoming Exhibitions Off-Site</div>

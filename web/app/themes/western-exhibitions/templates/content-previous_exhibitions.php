@@ -35,10 +35,6 @@
 
   $args = array(
     'post_type' => ['exhibition'],
-    // 'orderby' => 'start',
-    // 'order' => 'DESC',
-    // 'posts_per_page' => 5,
-    // 'paged' => $paged,
     'meta_query' => array($meta_query),
     'nopaging' => true,
     'orderby' => array('start_date' => 'DESC', 'gallery_location_clause' => 'ASC')
@@ -48,7 +44,7 @@
   ?>
 
 <div class="container">
-  <?php while (have_posts()) : the_post(); ?>
+  <?php while ($wp_query->have_posts()) : $wp_query->the_post(); ?>
     <?php
       $current_date = get_field('start_date');
       $date_year = DateTime::createFromFormat('M d, Y', $current_date)->format('Y');
