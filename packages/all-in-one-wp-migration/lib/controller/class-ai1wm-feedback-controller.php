@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2017 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,40 +23,79 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
+
 class Ai1wm_Feedback_Controller {
 
-	public static function feedback() {
+	public static function feedback( $params = array() ) {
+		ai1wm_setup_environment();
 
-		// Set Type
+		// Set params
+		if ( empty( $params ) ) {
+			$params = stripslashes_deep( $_POST );
+		}
+
+		// Set secret key
+		$secret_key = null;
+		if ( isset( $params['secret_key'] ) ) {
+			$secret_key = trim( $params['secret_key'] );
+		}
+
+		// Set type
 		$type = null;
-		if ( isset( $_POST['ai1wm_type'] ) ) {
-			$type = trim( $_POST['ai1wm_type'] );
+		if ( isset( $params['ai1wm_type'] ) ) {
+			$type = trim( $params['ai1wm_type'] );
 		}
 
-		// Set E-mail
+		// Set e-mail
 		$email = null;
-		if ( isset( $_POST['ai1wm_email'] ) ) {
-			$email = trim( $_POST['ai1wm_email'] );
+		if ( isset( $params['ai1wm_email'] ) ) {
+			$email = trim( $params['ai1wm_email'] );
 		}
 
-		// Set Message
+		// Set message
 		$message = null;
-		if ( isset( $_POST['ai1wm_message'] ) ) {
-			$message = trim( $_POST['ai1wm_message'] );
+		if ( isset( $params['ai1wm_message'] ) ) {
+			$message = trim( $params['ai1wm_message'] );
 		}
 
-		// Set Terms
+		// Set terms
 		$terms = false;
-		if ( isset( $_POST['ai1wm_terms'] ) ) {
-			$terms = (bool) $_POST['ai1wm_terms'];
+		if ( isset( $params['ai1wm_terms'] ) ) {
+			$terms = (bool) $params['ai1wm_terms'];
 		}
 
-		$model = new Ai1wm_Feedback;
+		try {
+			// Ensure that unauthorized people cannot access feedback action
+			ai1wm_verify_secret_key( $secret_key );
+		} catch ( Ai1wm_Not_Valid_Secret_Key_Exception $e ) {
+			exit;
+		}
 
-		// Send Feedback
-		$response = $model->add( $type, $email, $message, $terms );
+		$extensions = Ai1wm_Extensions::get();
 
-		echo json_encode( $response );
+		// Exclude File Extension
+		if ( defined( 'AI1WMTE_PLUGIN_NAME' ) ) {
+			unset( $extensions[ AI1WMTE_PLUGIN_NAME ] );
+		}
+
+		$purchases = array();
+		foreach ( $extensions as $extension ) {
+			if ( ( $uuid = get_option( $extension['key'] ) ) ) {
+				$purchases[] = $uuid;
+			}
+		}
+
+		try {
+			Ai1wm_Feedback::add( $type, $email, $message, $terms, implode( PHP_EOL, $purchases ) );
+		} catch ( Ai1wm_Feedback_Exception $e ) {
+			echo json_encode( array( 'errors' => array( $e->getMessage() ) ) );
+			exit;
+		}
+
+		echo json_encode( array( 'errors' => array() ) );
 		exit;
 	}
 }

@@ -20,14 +20,26 @@
         <?php
           if($artists):
             foreach ($artists as $artist):
+              if(!$show_title):
+                echo '<a href="',the_permalink(),'">';
+              endif;
               echo '<div class="pr-2">',$artist->post_title,'</div>';
+              if(!$show_title):
+                echo '</a>';
+              endif;
             endforeach;
           endif;
 
           if(have_rows('artist_non-roster')):
+            if(!$show_title):
+              echo '<a href="',the_permalink(),'">';
+            endif;
             while(have_rows('artist_non-roster')): the_row();
               echo '<div class="pr-2">',the_sub_field('artist_non-roster_name'),'</div>';
             endwhile;
+            if(!$show_title):
+              echo '</a>';
+            endif;
           endif;
         ?>
       </div>
@@ -35,15 +47,27 @@
       <div class="d-flex flex-wrap">
         <?php
           if($artists):
+            if(!$show_title):
+              echo '<a href="',the_permalink(),'">';
+            endif;
             foreach ($artists as $artist):
               echo '<div class="h4 pr-2">',$artist->post_title,'</div>';
             endforeach;
+            if(!$show_title):
+              echo '</a>';
+            endif;
           endif;
 
           if(have_rows('artist_non-roster')):
+            if(!$show_title):
+              echo '<a href="',the_permalink(),'">';
+            endif;
             while(have_rows('artist_non-roster')): the_row();
               echo '<div class="h4 pr-2">',the_sub_field('artist_non-roster_name'),'</div>';
             endwhile;
+            if(!$show_title):
+              echo '</a>';
+            endif;
           endif;
         ?>
       </div>

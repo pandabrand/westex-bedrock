@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2017 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,34 +23,59 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
+
 class Ai1wm_Report_Controller {
 
-	public static function report() {
+	public static function report( $params = array() ) {
+		ai1wm_setup_environment();
 
-		// Set E-mail
+		// Set params
+		if ( empty( $params ) ) {
+			$params = stripslashes_deep( $_POST );
+		}
+
+		// Set secret key
+		$secret_key = null;
+		if ( isset( $params['secret_key'] ) ) {
+			$secret_key = trim( $params['secret_key'] );
+		}
+
+		// Set e-mail
 		$email = null;
-		if ( isset( $_POST['ai1wm_email'] ) ) {
-			$email = trim( $_POST['ai1wm_email'] );
+		if ( isset( $params['ai1wm_email'] ) ) {
+			$email = trim( $params['ai1wm_email'] );
 		}
 
-		// Set Message
+		// Set message
 		$message = null;
-		if ( isset( $_POST['ai1wm_message'] ) ) {
-			$message = trim( $_POST['ai1wm_message'] );
+		if ( isset( $params['ai1wm_message'] ) ) {
+			$message = trim( $params['ai1wm_message'] );
 		}
 
-		// Set Terms
+		// Set terms
 		$terms = false;
-		if ( isset( $_POST['ai1wm_terms'] ) ) {
-			$terms = (bool) $_POST['ai1wm_terms'];
+		if ( isset( $params['ai1wm_terms'] ) ) {
+			$terms = (bool) $params['ai1wm_terms'];
 		}
 
-		$model = new Ai1wm_Report;
+		try {
+			// Ensure that unauthorized people cannot access report action
+			ai1wm_verify_secret_key( $secret_key );
+		} catch ( Ai1wm_Not_Valid_Secret_Key_Exception $e ) {
+			exit;
+		}
 
-		// Send Report
-		$response = $model->add( $email, $message, $terms );
+		try {
+			Ai1wm_Report::add( $email, $message, $terms );
+		} catch ( Ai1wm_Report_Exception $e ) {
+			echo json_encode( array( 'errors' => array( $e->getMessage() ) ) );
+			exit;
+		}
 
-		echo json_encode( $response );
+		echo json_encode( array( 'errors' => array() ) );
 		exit;
 	}
 }

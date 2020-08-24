@@ -12,11 +12,11 @@ if ( ! defined( 'ABSPATH' ) )
  *  @created  30/07/14
  */
 
-add_filter( 'wp_prepare_attachment_for_js', 'wpuxss_eml_prepare_attachment_for_js', 10, 2 );
+add_filter( 'wp_prepare_attachment_for_js', 'wpuxss_eml_prepare_attachment_for_js', 10, 3 );
 
 if ( ! function_exists( 'wpuxss_eml_prepare_attachment_for_js' ) ) {
 
-    function wpuxss_eml_prepare_attachment_for_js( $response, $attachment ) {
+    function wpuxss_eml_prepare_attachment_for_js( $response, $attachment, $meta ) {
 
         foreach ( get_object_taxonomies ( 'attachment', 'names' ) as $taxonomy ) {
 
@@ -75,16 +75,16 @@ if ( ! function_exists( 'wpuxss_eml_pro_print_media_templates' ) ) {
                                 if ( ob_get_contents() != false )
                                     $html = '<ul class="term-list">' . ob_get_contents() . '</ul>';
                                 else
-                                    $html = '<ul class="term-list"><li>No ' . $t['label'] . '</li></ul>';
+                                    $html = '<ul class="term-list"><li>No ' . esc_html($t['label']) . '</li></ul>';
 
                             ob_end_clean();
 
                             $t['input'] = 'html';
                             $t['html'] = $html; ?>
 
-                            <tr class="compat-field-<?php echo $taxonomy; ?>">
+                            <tr class="compat-field-<?php echo esc_attr($taxonomy); ?>">
                                 <th scope="row" class="label eml-tax-label">
-                                    <label for="attachments-<?php echo $taxonomy; ?>"><span class="alignleft"><?php echo $t['label']; ?></span><br class="clear" /></label>
+                                    <label for="attachments-<?php echo esc_attr($taxonomy); ?>"><span class="alignleft"><?php echo esc_html($t['label']); ?></span><br class="clear" /></label>
                                 </th>
                                 <td class="field eml-tax-field"><?php echo $t['html']; ?></td>
                             </tr>
@@ -159,7 +159,7 @@ if ( ! function_exists( 'wpuxss_eml_save_attachments' ) ) {
         check_ajax_referer( 'eml-bulk-edit-nonce', 'nonce' );
 
 
-        $wpuxss_eml_tax_options = get_option('wpuxss_eml_tax_options');
+        $wpuxss_eml_lib_options = get_option('wpuxss_eml_lib_options');
 
         $attachments = $_REQUEST['attachments'];
         $new_attachments = array();
@@ -246,10 +246,10 @@ if ( ! function_exists( 'wpuxss_eml_save_attachments' ) ) {
             $rows2remove = call_user_func_array( 'array_merge', $rows2remove );
 
             $all_removed = $wpdb->query( $wpdb->prepare(
-            	"
+                "
                     DELETE FROM $wpdb->term_relationships
                     WHERE (object_id,term_taxonomy_id) IN ($rows2remove_format)
-            	",
+                ",
                 $rows2remove
             ) );
         }
@@ -261,10 +261,10 @@ if ( ! function_exists( 'wpuxss_eml_save_attachments' ) ) {
             $rows2add = call_user_func_array( 'array_merge', $rows2add );
 
             $all_added = $wpdb->query( $wpdb->prepare(
-            	"
+                "
                     INSERT INTO $wpdb->term_relationships (object_id,term_taxonomy_id)
                     VALUES $rows2add_format
-            	",
+                ",
                 $rows2add
             ) );
         }
@@ -278,7 +278,7 @@ if ( ! function_exists( 'wpuxss_eml_save_attachments' ) ) {
             wp_update_term_count_now( array( $tt_id ), $taxonomy );
         }
 
-        if ( (bool) $wpuxss_eml_tax_options['show_count'] ) {
+        if ( (bool) $wpuxss_eml_lib_options['show_count'] ) {
 
             foreach( $term_pairs as $tt_id => $term_id ) {
                 $new_attachments['tcount'][$term_id] = wpuxss_eml_get_media_term_count( $term_id, $tt_id );
@@ -349,7 +349,7 @@ if ( ! function_exists( 'wpuxss_eml_bulk_attachments' ) ) {
         check_ajax_referer( 'eml-bulk-edit-nonce', 'nonce' );
 
 
-        $wpuxss_eml_tax_options = get_option('wpuxss_eml_tax_options');
+        $wpuxss_eml_lib_options = get_option('wpuxss_eml_lib_options');
 
         $attachments = $_REQUEST['attachments'];
         $bulk_action = isset( $_REQUEST['bulk_action'] ) ? $_REQUEST['bulk_action'] : '';
@@ -500,7 +500,7 @@ if ( ! function_exists( 'wpuxss_eml_bulk_attachments' ) ) {
 
          foreach( $affected_terms as $term_id => $term ) {
 
-             if ( (bool) $wpuxss_eml_tax_options['show_count'] )
+             if ( (bool) $wpuxss_eml_lib_options['show_count'] )
                 $affected_attachments['tcount'][$term_id] = wpuxss_eml_get_media_term_count( $term_id, $term['tt_id'] );
 
              wp_update_term_count_now( array( $term['tt_id'] ), $term['taxonomy'] );

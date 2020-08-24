@@ -17,7 +17,8 @@ $sage_includes = [
   'lib/wrapper.php',   // Theme wrapper class
   'lib/customizer.php', // Theme customizer
   'lib/wp-bootstrap4-navwalker.php',
-  'lib/westex.php'
+  'lib/westex.php',
+  'lib/acf/acf-sync.php'
 ];
 
 foreach ($sage_includes as $file) {

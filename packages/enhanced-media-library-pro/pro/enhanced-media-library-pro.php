@@ -1,21 +1,22 @@
 <?php
 
 if ( ! defined( 'ABSPATH' ) )
-	exit;
+    exit;
 
 
-
-if ( is_admin() ) {
 
     include_once( 'core/bulk-edit.php' );
     include_once( 'core/taxonomies.php' );
-    include_once( 'core/options-pages.php' );
     include_once( 'core/update.php' );
 
     if ( wpuxss_eml_enhance_media_shortcodes() ) {
         include_once( 'core/medialist.php' );
     }
-}
+
+    if ( is_admin() ) {
+        include_once( 'core/options-pages.php' );
+    }
+
 
 
 
@@ -32,26 +33,11 @@ if ( ! function_exists( 'wpuxss_eml_pro_admin_enqueue_scripts' ) ) {
 
     function wpuxss_eml_pro_admin_enqueue_scripts() {
 
-        global $wpuxss_eml_version,
-               $wpuxss_eml_dir,
+        global $wpuxss_eml_dir,
                $current_screen;
 
 
         $media_library_mode = get_user_option( 'media_library_mode', get_current_user_id() ) ? get_user_option( 'media_library_mode', get_current_user_id() ) : 'grid';
-
-
-        if ( isset( $current_screen ) &&
-             'upload' === $current_screen->base && 'grid' === $media_library_mode ) {
-
-            wp_dequeue_script( 'media' );
-            wp_enqueue_script(
-                'wpuxss-eml-pro-media-grid-script',
-                $wpuxss_eml_dir . 'pro/js/eml-media-grid.js',
-                array( 'wpuxss-eml-media-models-script', 'wpuxss-eml-media-views-script', 'wpuxss-eml-media-grid-script' ),
-                $wpuxss_eml_version,
-                true
-            );
-        }
 
 
         if ( isset( $current_screen ) &&
@@ -64,7 +50,7 @@ if ( ! function_exists( 'wpuxss_eml_pro_admin_enqueue_scripts' ) ) {
                 'wpuxss-eml-pro-bulk-popup-script',
                 $wpuxss_eml_dir . 'pro/js/eml-bulk-popup.js',
                 array( 'wpuxss-eml-pro-bulk-edit-script' ),
-                $wpuxss_eml_version,
+                EML_VERSION,
                 true
             );
         }
@@ -75,10 +61,19 @@ if ( ! function_exists( 'wpuxss_eml_pro_admin_enqueue_scripts' ) ) {
             'wpuxss-eml-pro-admin-custom-style',
             $wpuxss_eml_dir . 'pro/css/eml-pro-admin.css',
             array( 'wpuxss-eml-admin-custom-style' ),
-            $wpuxss_eml_version,
+            EML_VERSION,
             'all'
         );
         wp_style_add_data( 'wpuxss-eml-pro-admin-custom-style', 'rtl', 'replace' );
+
+        wp_enqueue_style(
+            'wpuxss-eml-pro-admin-media-style',
+            $wpuxss_eml_dir . 'pro/css/eml-pro-admin-media.css',
+            array( 'wpuxss-eml-admin-media-style' ),
+            EML_VERSION,
+            'all'
+        );
+        wp_style_add_data( 'wpuxss-eml-pro-admin-media-style', 'rtl', 'replace' );
 
     }
 }
@@ -98,8 +93,7 @@ if ( ! function_exists( 'wpuxss_eml_pro_enqueue_media' ) ) {
 
     function wpuxss_eml_pro_enqueue_media() {
 
-        global $wpuxss_eml_version,
-               $wpuxss_eml_dir;
+        global $wpuxss_eml_dir;
 
 
         if ( ! is_admin() ) {
@@ -107,11 +101,14 @@ if ( ! function_exists( 'wpuxss_eml_pro_enqueue_media' ) ) {
         }
 
 
+        $wpuxss_eml_tax_options = get_option( 'wpuxss_eml_tax_options', array() );
+
+
         wp_enqueue_script(
             'wpuxss-eml-pro-bulk-edit-script',
             $wpuxss_eml_dir . 'pro/js/eml-bulk-edit.js',
             array( 'wpuxss-eml-media-models-script', 'wpuxss-eml-media-views-script', 'wpuxss-eml-admin-script' ),
-            $wpuxss_eml_version,
+            EML_VERSION,
             true
         );
 
@@ -119,9 +116,6 @@ if ( ! function_exists( 'wpuxss_eml_pro_enqueue_media' ) ) {
             'toolTip_all' => __( 'ALL files belong to this item', 'enhanced-media-library' ),
             'toolTip_some' => __( 'SOME files belong to this item', 'enhanced-media-library' ),
             'toolTip_none' => __( 'NO files belong to this item', 'enhanced-media-library' ),
-            'saveButton_success' => __( 'Changes saved.', 'enhanced-media-library' ),
-            'saveButton_failure' => __( 'Something went wrong.', 'enhanced-media-library' ),
-            'saveButton_text' => __( 'Save Changes', 'enhanced-media-library' ),
             'media_new_close' => __( 'Close', 'enhanced-media-library' ),
             'media_new_title' => __( 'Edit Media Files', 'enhanced-media-library' ),
             'media_new_button' => __( 'Bulk Edit', 'enhanced-media-library' ),
@@ -136,7 +130,7 @@ if ( ! function_exists( 'wpuxss_eml_pro_enqueue_media' ) ) {
             'in_progress_delete_text' => __( 'Deleting', 'enhanced-media-library' ),
 
             // 'bulk_edit_nonce' => wp_create_nonce( 'eml-bulk-edit-nonce' ),
-            'bulk_edit_save_button_off' => get_option('wpuxss_eml_pro_bulkedit_savebutton_off'),
+            'bulk_edit_save_button_off' => ! (bool) $wpuxss_eml_tax_options['bulk_edit_save_button']
         );
 
         wp_localize_script(
@@ -152,7 +146,7 @@ if ( ! function_exists( 'wpuxss_eml_pro_enqueue_media' ) ) {
                 'wpuxss-eml-pro-enhanced-medialist-script',
                 $wpuxss_eml_dir . 'pro/js/eml-enhanced-medialist.js',
                 array( 'wpuxss-eml-enhanced-medialist-script' ),
-                $wpuxss_eml_version,
+                EML_VERSION,
                 true
             );
 
@@ -174,25 +168,35 @@ if ( ! function_exists( 'wpuxss_eml_pro_enqueue_media' ) ) {
 
 
 /**
- *  wpuxss_eml_pro_on_activation
+ *  wpuxss_eml_pro_set_options
  *
- *  @since    2.0
- *  @created 14/11/14
+ *  @since    2.7
+ *  @created 31/08/18
  */
 
-if ( ! function_exists( 'wpuxss_eml_pro_on_activation' ) ) {
+add_action( 'wpuxss_eml_set_options', 'wpuxss_eml_pro_set_options' );
 
-    function wpuxss_eml_pro_on_activation() {
+if ( ! function_exists( 'wpuxss_eml_pro_set_options' ) ) {
 
-        wpuxss_eml_pro_on_both_active();
+    function wpuxss_eml_pro_set_options() {
 
-        // actualize all upgrade admin messages
-        // pre_set_site_transient_update_plugins filter gets the correct info
-        $site_transient = get_site_transient('update_plugins');
-        set_site_transient( 'update_plugins', $site_transient );
+        delete_option( 'wpuxss_eml_pro_bulkedit_savebutton_off' );
 
-        if ( ! $bulkedit_savebutton_off = get_option( 'wpuxss_eml_pro_bulkedit_savebutton_off', false ) ) {
-            update_option( 'wpuxss_eml_pro_bulkedit_savebutton_off', 0 );
+        if ( is_multisite() ) {
+
+            $wpuxss_eml_pro_update_options = get_option( 'wpuxss_eml_pro_update_options' );
+            $wpuxss_eml_pro_license_key = get_option( 'wpuxss_eml_pro_license_key' );
+
+            delete_option( 'wpuxss_eml_pro_update_options' );
+            delete_option( 'wpuxss_eml_pro_license_key' );
+
+            if ( false === get_site_option( 'wpuxss_eml_pro_update_options' ) ) {
+                update_site_option( 'wpuxss_eml_pro_update_options', $wpuxss_eml_pro_update_options );
+            }
+
+            if ( false === get_site_option( 'wpuxss_eml_pro_license_key' ) ) {
+                update_site_option( 'wpuxss_eml_pro_license_key', $wpuxss_eml_pro_license_key );
+            }
         }
     }
 }
@@ -200,73 +204,108 @@ if ( ! function_exists( 'wpuxss_eml_pro_on_activation' ) ) {
 
 
 /**
- *  wpuxss_eml_pro_on_both_active
+ *  wpuxss_eml_pro_set_site_options
  *
- *  @since    2.0.4
- *  @created 28/12/15
+ *  @since    2.7
+ *  @created 31/08/18
  */
 
-add_action( 'admin_init', 'wpuxss_eml_pro_on_both_active' );
+add_action( 'wpuxss_eml_set_site_options', 'wpuxss_eml_pro_set_site_options' );
 
-if ( ! function_exists( 'wpuxss_eml_pro_on_both_active' ) ) {
+if ( ! function_exists( 'wpuxss_eml_pro_set_site_options' ) ) {
 
-    function wpuxss_eml_pro_on_both_active() {
+    function wpuxss_eml_pro_set_site_options() {
 
-        $all_eml_plugins = wpuxss_eml_preg_grep_keys( '/enhanced-media-library/i', get_plugins() );
+        $wpuxss_eml_pro_update_options = get_site_option( 'wpuxss_eml_pro_update_options', array() );
 
-        if ( count( $all_eml_plugins ) <= 1 )
+        $wpuxss_eml_pro_update_options_defaults = array(
+            'ssl_verification_off' => 0
+        );
+
+        $wpuxss_eml_pro_update_options = array_intersect_key( $wpuxss_eml_pro_update_options, $wpuxss_eml_pro_update_options_defaults );
+        $wpuxss_eml_pro_update_options = array_merge( $wpuxss_eml_pro_update_options_defaults, $wpuxss_eml_pro_update_options );
+
+        update_site_option( 'wpuxss_eml_pro_update_options', $wpuxss_eml_pro_update_options );
+
+        $license_key = get_site_option( 'wpuxss_eml_pro_license_key', '' );
+        wpuxss_eml_pro_look_for_update( $license_key );
+    }
+}
+
+
+
+/**
+ *  wpuxss_eml_pro_deactivate_extras
+ *
+ *  @since    2.6
+ *  @created 27/03/18
+ */
+
+add_action( 'activated_plugin', 'wpuxss_eml_pro_deactivate_extras', 10, 2 );
+
+if ( ! function_exists( 'wpuxss_eml_pro_deactivate_extras' ) ) {
+
+    function wpuxss_eml_pro_deactivate_extras( $plugin, $network_wide ) {
+
+        if ( $network_wide ) {
+            $active = count( preg_grep( '/enhanced-media-library/i', array_keys( (array) get_site_option( 'active_sitewide_plugins', array() ) ) ) );
+        }
+        else {
+            $active = count( preg_grep( '/enhanced-media-library/i', (array) get_option( 'active_plugins', array() ) ) );
+        }
+
+
+        if ( $active < 2 )
             return;
 
-        $old_free_eml = array_filter( $all_eml_plugins, 'wpuxss_eml_old_free_eml' );
 
-        $network_active = count( preg_grep( '/enhanced-media-library/i', array_keys( (array) get_site_option( 'active_sitewide_plugins', array() ) ) ) );
+        $deactivate = wpuxss_eml_preg_grep_keys( '/enhanced-media-library/i', get_plugins() );
+        uasort( $deactivate, 'wpuxss_eml_sort_plugins' );
 
-        $active = count( preg_grep( '/enhanced-media-library/i', (array) get_option( 'active_plugins', array() ) ) );
 
-        if ( count( $old_free_eml ) ) {
+        foreach ( $deactivate as $basename => $plugin ) {
 
-            $action = isset( $_REQUEST['action'] ) ? $_REQUEST['action'] : '';
-
-            if ( 'activate' == $action || 'activate-selected' == $action ) {
-
-                $free_basename = key( $old_free_eml );
-                $pro_basename = wpuxss_get_eml_basename();
-
-                $plugins = ( 'activate' == $action ? array( $_REQUEST['plugin'] ) : ( 'activate-selected' == $action ? (array) $_REQUEST['checked'] : array() ) );
-
-                if ( ! empty( $plugins ) && ( $active || $network_active ) &&
-                   ( in_array( $free_basename, $plugins ) || in_array( $pro_basename, $plugins ) ) ) {
-
-                    wp_die( __('Please deactivate and <strong>remove</strong> the old FREE version prior to the <strong>Enhanced Media Library PRO</strong> activation. All your data will remain intact.', 'enhanced-media-library') . '<br /><br /><a href="' . admin_url( 'plugins.php' ) . '">&laquo; ' . __('Return to Plugins', 'enhanced-media-library') . '</a>' );
-                }
+            if ( 'Enhanced Media Library PRO' === $plugin['Name'] && is_plugin_active($basename) ) {
+                unset( $deactivate[$basename] );
+                break;
             }
-            return;
         }
 
+        deactivate_plugins( array_keys( $deactivate ) );
 
-        if ( is_network_admin() && $network_active > 1 ) {
-            add_action( 'network_admin_notices', 'wpuxss_eml_pro_prevent_both_network_active_notice' );
-            return;
-        }
-
-        if ( is_multisite() && ( $active + $network_active ) > 1 ) {
-            add_action( 'admin_notices', 'wpuxss_eml_pro_prevent_one_network_active_notice' );
-            return;
-        }
-
-        if ( $active > 1 ) {
-            add_action( 'admin_notices', 'wpuxss_eml_pro_prevent_both_active_notice' );
-            return;
-        }
+        wp_safe_redirect( self_admin_url( 'plugins.php?eml-notice-warning=true' ) );
+        exit;
     }
 }
 
-if ( ! function_exists( 'wpuxss_eml_old_free_eml' ) ) {
 
-    function wpuxss_eml_old_free_eml( $eml ) {
-        return version_compare( $eml['Version'], '2.0.4', '<' );
+
+/**
+ *  wpuxss_eml_sort_plugins
+ *
+ *  @since    2.6
+ *  @created 27/03/18
+ */
+
+if ( ! function_exists( 'wpuxss_eml_sort_plugins' ) ) {
+
+    function wpuxss_eml_sort_plugins( $a, $b ) {
+
+        if ( $a['Name'] == $b['Name'] ) {
+            return version_compare( $a['Version'], $b['Version'], '<' );
+        }
+        return strcmp( $a['Name'], $b['Name'] );
     }
 }
+
+
+
+/**
+ *  wpuxss_eml_preg_grep_keys
+ *
+ *  @since    2.6
+ *  @created 27/03/18
+ */
 
 if ( ! function_exists( 'wpuxss_eml_preg_grep_keys' ) ) {
 
@@ -278,50 +317,22 @@ if ( ! function_exists( 'wpuxss_eml_preg_grep_keys' ) ) {
 
 
 /**
- *  wpuxss_eml_pro_prevent_both_network_active_notice
+ *  wpuxss_eml_pro_one_version_active_notice
  *
- *  @since    2.1
- *  @created 05/11/15
+ *  @since    2.6
+ *  @created 27/03/18
  */
 
-if ( ! function_exists( 'wpuxss_eml_pro_prevent_both_network_active_notice' ) ) {
+add_action( 'admin_notices', 'wpuxss_eml_pro_one_version_active_notice' );
+add_action( 'network_admin_notices', 'wpuxss_eml_pro_one_version_active_notice' );
 
-    function wpuxss_eml_pro_prevent_both_network_active_notice() {
+if ( ! function_exists( 'wpuxss_eml_pro_one_version_active_notice' ) ) {
 
-        echo '<div class="updated eml-admin-notice"><p>' . __( 'Both FREE and PRO versions of the Enhanced Media Library are network active. <strong>Enhanced Media Library PRO</strong> does not require free version to be active. Please network deactivate and delete the free versions of the plugin. All your data will remain intact.', 'enhanced-media-library' ) . '</p></div>';
-    }
-}
+    function wpuxss_eml_pro_one_version_active_notice() {
 
-
-
-/**
- *  wpuxss_eml_pro_prevent_both_active_notice
- *
- *  @since    2.1
- *  @created 05/11/15
- */
-
-if ( ! function_exists( 'wpuxss_eml_pro_prevent_both_active_notice' ) ) {
-
-    function wpuxss_eml_pro_prevent_both_active_notice() {
-
-        echo '<div class="updated eml-admin-notice"><p>' . __( '<strong>Enhanced Media Library PRO</strong> does not require free version to be active. Please deactivate and delete the free version of the plugin. All your data will remain intact.', 'enhanced-media-library' ) . '</p></div>';
-    }
-}
-
-
-
-/**
- *  wpuxss_eml_pro_prevent_one_network_active_notice
- *
- *  @since    2.1
- *  @created 05/11/15
- */
-
-if ( ! function_exists( 'wpuxss_eml_pro_prevent_one_network_active_notice' ) ) {
-
-    function wpuxss_eml_pro_prevent_one_network_active_notice() {
-        echo '<div class="updated eml-admin-notice"><p>' . __( 'Both FREE and PRO versions of the Enhanced Media Library are active for this site. <strong>Enhanced Media Library PRO</strong> does not require free version to be active. Please deactivate (or network deactivate) and delete the free version of the plugin for this site. All your data will remail intact.', 'enhanced-media-library' ) . '</p></div>';
+        if ( isset( $_GET['eml-notice-warning'] ) ) {
+            echo '<div class="notice notice-warning eml-admin-notice"><p>' . __( 'Only one version of <strong>Enhanced Media Library</strong> should be active at a time.', 'enhanced-media-library' ) . '</p></div>';
+        }
     }
 }
 

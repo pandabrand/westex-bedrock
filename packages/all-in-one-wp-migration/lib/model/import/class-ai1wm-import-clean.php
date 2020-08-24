@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2017 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,27 +23,33 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
+
 class Ai1wm_Import_Clean {
 
 	public static function execute( $params ) {
+		global $wpdb;
 
-		// Iterate over storage directory
-		$iterator = new Ai1wm_Recursive_Directory_Iterator( ai1wm_storage_path( $params ) );
-
-		// Recursively iterate over storage directory
-		$iterator = new RecursiveIteratorIterator( $iterator, RecursiveIteratorIterator::CHILD_FIRST, RecursiveIteratorIterator::CATCH_GET_CHILD );
-
-		// Remove files and directories
-		foreach ( $iterator as $item ) {
-			if ( $item->isDir() ) {
-				@rmdir( $item->getPathname() );
-			} else {
-				@unlink( $item->getPathname() );
-			}
+		// Get database client
+		if ( empty( $wpdb->use_mysqli ) ) {
+			$mysql = new Ai1wm_Database_Mysql( $wpdb );
+		} else {
+			$mysql = new Ai1wm_Database_Mysqli( $wpdb );
 		}
 
-		// Remove storage path
-		@rmdir( ai1wm_storage_path( $params ) );
+		// Flush mainsite tables
+		$mysql->set_include_table_prefixes( array( ai1wm_table_prefix( 'mainsite' ) ) );
+		$mysql->flush();
+
+		// Delete storage files
+		Ai1wm_Directory::delete( ai1wm_storage_path( $params ) );
+
+		// Exit in console
+		if ( defined( 'WP_CLI' ) ) {
+			return $params;
+		}
 
 		exit;
 	}

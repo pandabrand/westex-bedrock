@@ -14,10 +14,13 @@
           <a class="c-footer-icon-item" href="http://instagram.com/westernexhibitions" target="_blank"><i class="fa fa-instagram"></i></a>
         </ul>
       </address>
-      <div class="p-2 u-label-font text-right">
+      <div class="ml-4 p-2 u-label-font text-right">
         Gallery hours<br/>
         Tuesday thru Saturday<br/>
-        11am to 6pm
+        11am to 5pm
+      </div>
+      <div class="tock-footer">
+        <?php echo tock_widget(); ?>
       </div>
       <?php dynamic_sidebar('sidebar-footer'); ?>
     </div>

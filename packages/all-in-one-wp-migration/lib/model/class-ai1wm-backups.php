@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2017 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,10 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
+
 class Ai1wm_Backups {
 
 	/**
@@ -30,56 +34,105 @@ class Ai1wm_Backups {
 	 *
 	 * @return array
 	 */
-	public function get_files() {
+	public static function get_files() {
 		$backups = array();
 
-		// Get backup files
-		$iterator = new Ai1wm_Extension_Filter(
-			new DirectoryIterator( AI1WM_BACKUPS_PATH ),
-			array( 'wpress', 'bin' )
-		);
+		try {
 
-		foreach ( $iterator as $item ) {
-			try {
-				$backups[] = array(
-					'filename' => $item->getFilename(),
-					'mtime'    => $item->getMTime(),
-					'size'     => $item->getSize(),
-				);
-			} catch ( Exception $e ) {
-				$backups[] = array(
-					'filename' => $item->getFilename(),
-					'mtime'    => null,
-					'size'     => ai1wm_filesize( $item->getPathname() ),
-				);
+			// Iterate over directory
+			$iterator = new Ai1wm_Recursive_Directory_Iterator( AI1WM_BACKUPS_PATH );
+
+			// Filter by extensions
+			$iterator = new Ai1wm_Recursive_Extension_Filter( $iterator, array( 'wpress' ) );
+
+			// Recursively iterate over directory
+			$iterator = new Ai1wm_Recursive_Iterator_Iterator( $iterator, RecursiveIteratorIterator::LEAVES_ONLY, RecursiveIteratorIterator::CATCH_GET_CHILD );
+
+			// Get backup files
+			foreach ( $iterator as $item ) {
+				try {
+					if ( ai1wm_is_filesize_supported( $item->getPathname() ) ) {
+						$backups[] = array(
+							'path'     => $iterator->getSubPath(),
+							'filename' => $iterator->getSubPathname(),
+							'mtime'    => $iterator->getMTime(),
+							'size'     => $iterator->getSize(),
+						);
+					} else {
+						$backups[] = array(
+							'path'     => $iterator->getSubPath(),
+							'filename' => $iterator->getSubPathname(),
+							'mtime'    => $iterator->getMTime(),
+							'size'     => null,
+						);
+					}
+				} catch ( Exception $e ) {
+					$backups[] = array(
+						'path'     => $iterator->getSubPath(),
+						'filename' => $iterator->getSubPathname(),
+						'mtime'    => null,
+						'size'     => null,
+					);
+				}
 			}
-		}
 
-		// Sort backups modified date
-		usort( $backups, array( $this, 'compare' ) );
+			// Sort backups modified date
+			usort( $backups, 'Ai1wm_Backups::compare' );
+
+		} catch ( Exception $e ) {
+		}
 
 		return $backups;
 	}
 
 	/**
-	 * Delete file
+	 * Delete backup file
 	 *
 	 * @param  string  $file File name
 	 * @return boolean
 	 */
-	public function delete_file( $file ) {
-		if ( empty( $file ) ) {
-			throw new Ai1wm_Backups_Exception( __( 'File name is not specified.', AI1WM_PLUGIN_NAME ) );
-		} else if ( ! unlink( AI1WM_BACKUPS_PATH . DIRECTORY_SEPARATOR . $file ) ) {
-			throw new Ai1wm_Backups_Exception(
-				sprintf(
-					__( 'Unable to delete <strong>"%s"</strong> file.', AI1WM_PLUGIN_NAME ),
-					AI1WM_BACKUPS_PATH . DIRECTORY_SEPARATOR . $file
-				)
-			);
+	public static function delete_file( $file ) {
+		if ( validate_file( $file ) === 0 ) {
+			return @unlink( ai1wm_backup_path( array( 'archive' => $file ) ) );
+		}
+	}
+
+	/**
+	 * Get all backup labels
+	 *
+	 * @return array
+	 */
+	public static function get_labels() {
+		return get_option( AI1WM_BACKUPS_LABELS, array() );
+	}
+
+	/**
+	 * Set backup label
+	 *
+	 * @param  string  $file  File name
+	 * @param  string  $label File label
+	 * @return boolean
+	 */
+	public static function set_label( $file, $label ) {
+		if ( ( $labels = get_option( AI1WM_BACKUPS_LABELS, array() ) ) !== false ) {
+			$labels[ $file ] = $label;
 		}
 
-		return true;
+		return update_option( AI1WM_BACKUPS_LABELS, $labels );
+	}
+
+	/**
+	 * Delete backup label
+	 *
+	 * @param  string  $file File name
+	 * @return boolean
+	 */
+	public static function delete_label( $file ) {
+		if ( ( $labels = get_option( AI1WM_BACKUPS_LABELS, array() ) ) !== false ) {
+			unset( $labels[ $file ] );
+		}
+
+		return update_option( AI1WM_BACKUPS_LABELS, $labels );
 	}
 
 	/**
@@ -89,7 +142,7 @@ class Ai1wm_Backups {
 	 * @param  array $b File item B
 	 * @return integer
 	 */
-	public function compare( $a, $b ) {
+	public static function compare( $a, $b ) {
 		if ( $a['mtime'] === $b['mtime'] ) {
 			return 0;
 		}

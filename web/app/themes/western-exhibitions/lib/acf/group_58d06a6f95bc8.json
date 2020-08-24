@@ -1,0 +1,51 @@
+{
+    "key": "group_58d06a6f95bc8",
+    "title": "Artist Pages",
+    "fields": [
+        {
+            "key": "field_58d06a7df8bb7",
+            "label": "Artist or Exhibiton Page",
+            "name": "artist_exhibition_page",
+            "type": "relationship",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "artist",
+                "exhibition"
+            ],
+            "taxonomy": [],
+            "min": "",
+            "max": "",
+            "filters": [
+                "search",
+                "post_type"
+            ],
+            "elements": "",
+            "return_format": "object"
+        }
+    ],
+    "location": [
+        [
+            {
+                "param": "post_type",
+                "operator": "==",
+                "value": "page"
+            }
+        ]
+    ],
+    "menu_order": 0,
+    "position": "normal",
+    "style": "default",
+    "label_placement": "top",
+    "instruction_placement": "label",
+    "hide_on_screen": "",
+    "active": true,
+    "description": "",
+    "modified": 1598237464
+}

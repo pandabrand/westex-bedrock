@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2017 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,24 +23,62 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
+
 class Ai1wm_Import_Plugins {
 
-	public static function execute( $params ) {
+	public static function execute( $params, $mysql = null ) {
+		global $wpdb;
 
 		// Set progress
-		Ai1wm_Status::info( __( 'Activating mu-plugins...', AI1WM_PLUGIN_NAME ) );
+		Ai1wm_Status::info( __( 'Preparing plugins...', AI1WM_PLUGIN_NAME ) );
 
-		// Open the archive file for reading
-		$archive = new Ai1wm_Extractor( ai1wm_archive_path( $params ) );
+		// Get database client
+		if ( is_null( $mysql ) ) {
+			if ( empty( $wpdb->use_mysqli ) ) {
+				$mysql = new Ai1wm_Database_Mysql( $wpdb );
+			} else {
+				$mysql = new Ai1wm_Database_Mysqli( $wpdb );
+			}
+		}
 
-		// Unpack mu-plugins files
-		$archive->extract_by_files_array( WP_CONTENT_DIR, array( AI1WM_MUPLUGINS_NAME ) );
+		$tables = $mysql->get_tables();
 
-		// Close the archive file
-		$archive->close();
+		// Get base prefix
+		$base_prefix = ai1wm_table_prefix();
+
+		// Get mainsite prefix
+		$mainsite_prefix = ai1wm_table_prefix( 'mainsite' );
+
+		// Check WP sitemeta table exists
+		if ( in_array( "{$mainsite_prefix}sitemeta", $tables ) ) {
+
+			// Get fs_accounts option value (Freemius)
+			$result = $mysql->query( "SELECT meta_value FROM `{$mainsite_prefix}sitemeta` WHERE meta_key = 'fs_accounts'" );
+			if ( $row = $mysql->fetch_assoc( $result ) ) {
+				$fs_accounts = get_option( 'fs_accounts', array() );
+				$meta_value  = maybe_unserialize( $row['meta_value'] );
+
+				// Update fs_accounts option value (Freemius)
+				if ( ( $fs_accounts = array_merge( $fs_accounts, $meta_value ) ) ) {
+					if ( isset( $fs_accounts['users'], $fs_accounts['sites'] ) ) {
+						update_option( 'fs_accounts', $fs_accounts );
+					} else {
+						delete_option( 'fs_accounts' );
+						delete_option( 'fs_dbg_accounts' );
+						delete_option( 'fs_active_plugins' );
+						delete_option( 'fs_api_cache' );
+						delete_option( 'fs_dbg_api_cache' );
+						delete_option( 'fs_debug_mode' );
+					}
+				}
+			}
+		}
 
 		// Set progress
-		Ai1wm_Status::info( __( 'Done activating mu-plugins...', AI1WM_PLUGIN_NAME ) );
+		Ai1wm_Status::info( __( 'Done preparing plugins.', AI1WM_PLUGIN_NAME ) );
 
 		return $params;
 	}

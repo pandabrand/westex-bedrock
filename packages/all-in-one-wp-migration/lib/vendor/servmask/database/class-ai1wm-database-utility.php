@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2017 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -23,6 +23,10 @@
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
 
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
+
 class Ai1wm_Database_Utility {
 
 	/**
@@ -35,7 +39,11 @@ class Ai1wm_Database_Utility {
 	 * @return mixed        The original string with all elements replaced as needed.
 	 */
 	public static function replace_values( $from = array(), $to = array(), $data = '' ) {
-		return strtr( $data, array_combine( $from, $to ) );
+		if ( ! empty( $from ) && ! empty( $to ) ) {
+			return strtr( $data, array_combine( $from, $to ) );
+		}
+
+		return $data;
 	}
 
 	/**
@@ -55,35 +63,37 @@ class Ai1wm_Database_Utility {
 			// Some unserialized data cannot be re-serialized eg. SimpleXMLElements
 			if ( is_serialized( $data ) && ( $unserialized = @unserialize( $data ) ) !== false ) {
 				$data = self::replace_serialized_values( $from, $to, $unserialized, true );
-			} else if ( is_array( $data ) ) {
+			} elseif ( is_array( $data ) ) {
 				$tmp = array();
 				foreach ( $data as $key => $value ) {
-					$tmp[$key] = self::replace_serialized_values( $from, $to, $value, false );
+					$tmp[ $key ] = self::replace_serialized_values( $from, $to, $value, false );
 				}
 
 				$data = $tmp;
 				unset( $tmp );
 			} elseif ( is_object( $data ) ) {
-				$tmp = $data;
-				$props = get_object_vars( $data );
-				foreach ( $props as $key => $value ) {
-					$tmp->$key = self::replace_serialized_values( $from, $to, $value, false );
-				}
+				if ( ! ( $data instanceof __PHP_Incomplete_Class ) ) {
+					$tmp   = $data;
+					$props = get_object_vars( $data );
+					foreach ( $props as $key => $value ) {
+						$tmp->$key = self::replace_serialized_values( $from, $to, $value, false );
+					}
 
-				$data = $tmp;
-				unset( $tmp );
+					$data = $tmp;
+					unset( $tmp );
+				}
 			} else {
 				if ( is_string( $data ) ) {
-					$data = strtr( $data, array_combine( $from, $to ) );
+					if ( ! empty( $from ) && ! empty( $to ) ) {
+						$data = strtr( $data, array_combine( $from, $to ) );
+					}
 				}
 			}
 
 			if ( $serialized ) {
 				return serialize( $data );
 			}
-
 		} catch ( Exception $e ) {
-			// pass
 		}
 
 		return $data;
@@ -92,28 +102,62 @@ class Ai1wm_Database_Utility {
 	/**
 	 * Escape MySQL special characters
 	 *
-	 * @param  string $data Data to replace.
+	 * @param  string $data Data to escape
 	 * @return string
 	 */
 	public static function escape_mysql( $data ) {
-		return str_ireplace(
-			array( '\\', '\0', "\n", "\r", "\x1a", "'", '"', "\0" ),
-			array( '\\\\', '\\0', "\\n", "\\r", '\Z', "\'", '\"', '\0' ),
-			$data
+		return strtr(
+			$data,
+			array_combine(
+				array( "\x00", "\n", "\r", '\\', "'", '"', "\x1a" ),
+				array( '\\0', '\\n', '\\r', '\\\\', "\\'", '\\"', '\\Z' )
+			)
 		);
 	}
 
 	/**
 	 * Unescape MySQL special characters
 	 *
-	 * @param  string $data Data to replace.
+	 * @param  string $data Data to unescape
 	 * @return string
 	 */
 	public static function unescape_mysql( $data ) {
-		return str_ireplace(
-			array( '\\\\', '\\0', "\\n", "\\r", '\Z', "\'", '\"', '\0' ),
-			array( '\\', '\0', "\n", "\r", "\x1a", "'", '"', "\0" ),
-			$data
+		return strtr(
+			$data,
+			array_combine(
+				array( '\\0', '\\n', '\\r', '\\\\', "\\'", '\\"', '\\Z' ),
+				array( "\x00", "\n", "\r", '\\', "'", '"', "\x1a" )
+			)
 		);
+	}
+
+	/**
+	 * Encode base64 characters
+	 *
+	 * @param  string $data Data to encode
+	 * @return string
+	 */
+	public static function base64_encode( $data ) {
+		return base64_encode( $data );
+	}
+
+	/**
+	 * Encode base64 characters
+	 *
+	 * @param  string $data Data to decode
+	 * @return string
+	 */
+	public static function base64_decode( $data ) {
+		return base64_decode( $data );
+	}
+
+	/**
+	 * Validate base64 data
+	 *
+	 * @param  string  $data Data to validate
+	 * @return boolean
+	 */
+	public static function base64_validate( $data ) {
+		return base64_encode( base64_decode( $data ) ) === $data;
 	}
 }

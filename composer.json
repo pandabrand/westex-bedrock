@@ -61,7 +61,7 @@
     "roots/wp-password-bcrypt": "1.0.0",
     "elliotcondon/advanced-custom-fields-pro":"*",
     "pandabrand/western-exhibitions":"dev-master",
-    "wpUXsolutions/enhanced-media-library-pro": "2.4.4",
+    "wpuxsolutions/enhanced-media-library-pro": "2.4.4",
     "wpackagist-plugin/regenerate-thumbnails": "dev-trunk",
     "wpackagist-plugin/wp-all-import": "dev-trunk",
     "soflyy/wpai-acf-add-on":"3.1.3",

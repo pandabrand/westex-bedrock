@@ -6,72 +6,142 @@ if ( ! defined( 'ABSPATH' ) )
 
 
 /**
- *  wpuxss_eml_pro_site_transient_update_plugins
+ *  wpuxss_eml_pro_maybe_update
  *
- *  @since    2.0
- *  @created  13/10/14
+ *  @since    2.5
+ *  @created  28/01/18
  */
 
-add_filter ('pre_set_site_transient_update_plugins', 'wpuxss_eml_pro_site_transient_update_plugins');
+add_action( 'admin_init', 'wpuxss_eml_pro_maybe_update' );
 
-if ( ! function_exists( 'wpuxss_eml_pro_site_transient_update_plugins' ) ) {
+if ( ! function_exists( 'wpuxss_eml_pro_maybe_update' ) ) {
 
-    function wpuxss_eml_pro_site_transient_update_plugins( $transient ) {
+    function wpuxss_eml_pro_maybe_update() {
 
-        global $wpuxss_eml_version;
+        global $pagenow;
+
+        $eml_transient = get_site_transient( 'eml_transient' );
+        $period = isset( $eml_transient->update_error ) ? 30 * MINUTE_IN_SECONDS : 12 * HOUR_IN_SECONDS;
+
+
+        if ( isset( $eml_transient->last_checked )
+        && $period > ( time() - $eml_transient->last_checked )
+        // making sure force-check is taken into account on update-core.php only
+        && ( empty( $_GET['force-check'] ) || 'update-core.php' !== $pagenow ) ) {
+            return;
+        }
+
+        $license_key = get_site_option( 'wpuxss_eml_pro_license_key', '' );
+        wpuxss_eml_pro_look_for_update( $license_key );
+    }
+}
+
+
+
+/**
+ *  wpuxss_eml_pro_look_for_update
+ *
+ *  @since    2.5
+ *  @created  28/01/18
+ */
+
+if ( ! function_exists( 'wpuxss_eml_pro_look_for_update' ) ) {
+
+    function wpuxss_eml_pro_look_for_update( $license_key ) {
+
+        $remote_info = wpuxss_eml_pro_remote_info( 'get-info', $license_key );
+        $wpuxss_eml_pro_basename = wpuxss_get_eml_basename();
+        $eml_transient = new stdClass;
+
+
+        $eml_license_active = ( ! empty( $license_key ) && ! is_wp_error( $remote_info ) && 'active' === $remote_info->license_status ) ? 1 : 0;
+
+
+        delete_site_transient( 'eml_transient' );
+
+
+        $eml_transient->license_was_active = $eml_license_active;
+        $eml_transient->last_checked = time();
+
+
+        if ( is_wp_error( $remote_info ) ) {
+            $eml_transient->update_error = $remote_info->get_error_message();
+        }
+        elseif ( '' === $license_key ) {
+            // add nothing to $eml_transient in this case
+        }
+        elseif ( version_compare( $remote_info->version, EML_VERSION, '>' ) ) {
+
+            $wpuxss_eml_pro_slug = wpuxss_get_eml_slug();
+
+
+            $args = array(
+                'action' => 'update',
+                'key' => $license_key
+            );
+
+            $eml_transient->name = $remote_info->name;
+            $eml_transient->slug = $wpuxss_eml_pro_slug;
+            $eml_transient->plugin = $wpuxss_eml_pro_basename;
+            $eml_transient->new_version = $remote_info->version;
+            $eml_transient->requires = $remote_info->requires;
+            $eml_transient->tested = $remote_info->tested;
+            $eml_transient->added = $remote_info->added;
+            $eml_transient->last_updated = $remote_info->last_updated;
+            $eml_transient->url = $remote_info->url;
+            $eml_transient->package = $eml_license_active ? wpuxss_eml_pro_get_url() . '?' . build_query( $args ) : '';
+        }
+
+        set_site_transient( 'eml_transient', $eml_transient );
+    }
+}
+
+
+
+/**
+ *  wpuxss_eml_pro_set_site_transient_update_plugins
+ *
+ *  @since    2.5
+ *  @created  28/01/18
+ */
+
+add_action( 'load-plugins.php', 'wpuxss_eml_pro_set_site_transient_update_plugins' );
+add_action( 'load-update.php', 'wpuxss_eml_pro_set_site_transient_update_plugins' );
+add_action( 'load-update-core.php', 'wpuxss_eml_pro_set_site_transient_update_plugins' );
+add_action( 'wp_update_plugins', 'wpuxss_eml_pro_set_site_transient_update_plugins' );
+
+if ( ! function_exists( 'wpuxss_eml_pro_set_site_transient_update_plugins' ) ) {
+
+    function wpuxss_eml_pro_set_site_transient_update_plugins() {
+
+        $eml_transient = get_site_transient( 'eml_transient' );
+
+
+        if ( false === $eml_transient ) {
+            return;
+        }
+
+
+        unset( $eml_transient->last_checked );
+        unset( $eml_transient->update_error );
+        unset( $eml_transient->license_was_active );
 
 
         $wpuxss_eml_pro_basename = wpuxss_get_eml_basename();
+        $transient = get_site_transient( 'update_plugins' );
 
-
-        if ( isset( $transient->response[$wpuxss_eml_pro_basename] ) ) {
-            return $transient;
+        if ( ! is_object( $transient ) ) {
+            $transient = new stdClass;
         }
 
-
-
-        $license_key = get_option( 'wpuxss_eml_pro_license_key', '' );
-        $info = wpuxss_eml_pro_remote_info( 'get-info', $license_key );
-
-
-        $eml_license_active = ( ! empty( $license_key ) && ! is_wp_error( $info ) && 'active' === $info->license_status ) ? 1 : 0;
-        set_site_transient( 'eml_license_active', $eml_license_active );
-
-
-        if ( is_wp_error( $info ) ) {
-            $transient->eml_error = $info->get_error_message();
-            return $transient;
+        if ( ! isset( $eml_transient->package ) ) {
+            unset( $transient->response[$wpuxss_eml_pro_basename] );
         }
-        elseif ( version_compare( $info->version, $wpuxss_eml_version, '<=' ) ) {
-            return $transient;
+        else {
+            $transient->response[$wpuxss_eml_pro_basename] = $eml_transient;
         }
 
-
-        $wpuxss_eml_pro_slug = wpuxss_get_eml_slug();
-
-
-        $args = array(
-            'action' => 'update',
-            'key' => $license_key
-        );
-
-        $new_info = new stdClass();
-
-        $new_info->name = $info->name;
-        $new_info->slug = $wpuxss_eml_pro_slug;
-        $new_info->plugin = $wpuxss_eml_pro_basename;
-        $new_info->new_version = $info->version;
-        $new_info->requires = $info->requires;
-        $new_info->tested = $info->tested;
-        $new_info->added = $info->added;
-        $new_info->last_updated = $info->last_updated;
-        $new_info->url = $info->url;
-        $new_info->package = ( ! empty( $license_key ) && 'active' === $info->license_status ) ? wpuxss_eml_pro_get_url() . '?' . build_query( $args ) : '';
-
-        $transient->response[$wpuxss_eml_pro_basename] = $new_info;
-
-
-        return $transient;
+        set_site_transient( 'update_plugins', $transient );
     }
 }
 
@@ -90,39 +160,75 @@ if ( ! function_exists( 'wpuxss_eml_update_request_error_message' ) ) {
 
     function wpuxss_eml_update_request_error_message( $file, $plugin_data, $status ) {
 
-        if ( ! current_user_can( 'update_plugins' ) ) {
-            return false;
-        }
+        if ( ! current_user_can( 'update_plugins' ) )
+            return;
+
+        if ( is_multisite() && ! is_network_admin() )
+            return;
 
 
-        $transient = get_site_transient( 'update_plugins' );
-
-        if ( ! isset( $transient->eml_error ) ) {
-            return false;
-        }
-
-
-        $plugin_name   = __( 'Enhanced Media Library PRO', 'enhanced-media-library' );
         $wp_list_table = _get_list_table( 'WP_Plugins_List_Table' );
 
+        if ( is_network_admin() ) {
+            $active_class = is_plugin_active_for_network( $file ) ? ' active' : '';
+        }
+        else {
+            $active_class = is_plugin_active( $file ) ? ' active' : '';
+        }
 
-        if ( is_network_admin() || ! is_multisite() ) {
-            if ( is_network_admin() ) {
-                $active_class = is_plugin_active_for_network( $file ) ? ' active' : '';
-            } else {
-                $active_class = is_plugin_active( $file ) ? ' active' : '';
-            }
+        $open = '<tr class="plugin-update-tr' . esc_attr($active_class) . '" id="' . esc_attr( wpuxss_get_eml_slug() . '-update-error' ) . '" data-slug="' . esc_attr( wpuxss_get_eml_slug() ) . '" data-plugin="' . esc_attr( $file ) . '"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange"><div class="update-message notice inline notice-warning notice-alt"><p>';
+        $close = '</p></div></td></tr>';
 
-            echo '<tr class="plugin-update-tr' . $active_class . '" id="' . esc_attr( wpuxss_get_eml_slug() . '-update-error' ) . '" data-slug="' . esc_attr( wpuxss_get_eml_slug() ) . '" data-plugin="' . esc_attr( $file ) . '"><td colspan="' . esc_attr( $wp_list_table->get_column_count() ) . '" class="plugin-update colspanchange"><div class="update-message notice inline notice-warning notice-alt"><p>';
 
-            printf( __( '%1$s could not establish a secure connection to request information about available updates. An error occurred: %2$s. Please <a href="%3$s">contact plugin authors</a>.', 'enhanced-media-library' ),
-                $plugin_name,
-                '<strong>'.$transient->eml_error.'</strong>',
-                'https://www.wpuxsolutions.com/support/'
+        $license_key = get_site_option( 'wpuxss_eml_pro_license_key', '' );
+
+        if ( '' === $license_key ) {
+
+            echo $open;
+
+            printf(
+                '<strong>%s</strong> ',
+                sprintf(
+                    __('Auto-updates disabled for %s.','enhanced-media-library'),
+                     esc_html($plugin_data['Name'])
+                )
             );
 
-            echo '</p></div></td></tr>';
+            $utility_link = is_multisite() ? network_admin_url('settings.php?page=eml-settings#eml-license-key-section') : admin_url('options-general.php?page=eml-settings#eml-license-key-section');
+
+            printf(
+                __('To unlock updates, please <a href="%s">activate your license</a>. You can get your license key in <a href="%s">Your Account</a>. If you do not have a license, you are welcome to <a href="%s">purchase it</a>.', 'enhanced-media-library'),
+                $utility_link,
+                esc_url('https://wpuxsolutions.com/account/'),
+                esc_url('https://wpuxsolutions.com/pricing/')
+            );
+
+            echo $close;
+
+            return;
         }
+
+
+        $eml_transient = get_site_transient( 'eml_transient' );
+
+        if ( ! isset( $eml_transient->update_error ) ) {
+            return;
+        }
+
+
+        echo $open;
+
+        printf( __( '%s could not establish a secure connection %s. An error occurred: %s. Please <a href="%s">contact plugin authors</a>.', 'enhanced-media-library' ),
+            esc_html($plugin_data['Name']),
+            __( 'to check if an update is available', 'enhanced-media-library' ),
+            sprintf(
+                '<strong>%s</strong>',
+                esc_html($eml_transient->update_error)
+            ),
+            esc_url('https://wpuxsolutions.com/support/')
+        );
+
+        echo $close;
     }
 }
 
@@ -185,14 +291,19 @@ if ( ! function_exists( 'wpuxss_eml_pro_plugins_api' ) ) {
 
 
         // getting info for PRO from the latest transient
+        // TODO: maybe use eml_transient?
+        $info = new stdClass();
         $transient = get_site_transient( 'update_plugins' );
         $wpuxss_eml_pro_basename = wpuxss_get_eml_basename();
-        $info = $transient->response[$wpuxss_eml_pro_basename];
 
 
-        if ( empty ( $info ) ) {
+        if ( isset( $transient->response[$wpuxss_eml_pro_basename] ) ) {
+            $info = $transient->response[$wpuxss_eml_pro_basename];
+        }
+        else {
             return $res;
         }
+
 
         $res->name          = $info->name;
         $res->slug          = $info->slug;
@@ -226,16 +337,16 @@ if ( ! function_exists( 'wpuxss_eml_pro_in_plugin_update_message' ) ) {
         $wpuxss_eml_pro_basename = wpuxss_get_eml_basename();
 
 
-        if ( ! empty( $transient->response[$wpuxss_eml_pro_basename]->package ) ) {
+        if ( '' !== $transient->response[$wpuxss_eml_pro_basename]->package ) {
             return;
         }
 
 
         echo '<br />' . sprintf(
             __('To unlock updates, please <a href="%s">activate your license</a>. You can get your license key in <a href="%s">Your Account</a>. If you do not have a license, you are welcome to <a href="%s">purchase it</a>.', 'enhanced-media-library'),
-            admin_url('options-general.php?page=eml-settings#eml-license-key-section'),
-            'https://www.wpuxsolutions.com/account/',
-            'https://www.wpuxsolutions.com/pricing/'
+            self_admin_url('options-general.php?page=eml-settings#eml-license-key-section'),
+            esc_url('https://wpuxsolutions.com/account/'),
+            esc_url('https://wpuxsolutions.com/pricing/')
         );
     }
 }
@@ -253,21 +364,31 @@ if ( ! function_exists( 'wpuxss_eml_pro_remote_info' ) ) {
 
     function wpuxss_eml_pro_remote_info( $action, $license_key = '' ) {
 
-        global $wpuxss_eml_version;
+        global $pagenow;
 
 
+        $wpuxss_eml_pro_update_options = get_site_option( 'wpuxss_eml_pro_update_options', array() );
         $url = wpuxss_eml_pro_get_url();
+        $ssl_verification_off = isset( $wpuxss_eml_pro_update_options['ssl_verification_off'] ) && (bool) $wpuxss_eml_pro_update_options['ssl_verification_off'] ? 1 : 0;
+        $force_check = ! empty( $_GET['force-check'] ) ? 1 : 0;
+        $eml_transient = get_site_transient( 'eml_transient' );
+        $last_checked = isset( $eml_transient->last_checked ) ? $eml_transient->last_checked : '';
 
         $args = array(
             'timeout' => 15,
             'body' => array(
                 'action' => $action,
                 'key' => $license_key,
-                'version' => $wpuxss_eml_version
+                'version' => EML_VERSION,
+                'pagenow' => $pagenow,
+                'last_checked' => $last_checked,
+                'force_check' => $force_check,
+                'sslverify' => ! $ssl_verification_off
             )
         );
 
         $request = wp_remote_post( $url, $args );
+
 
         if ( ! is_wp_error( $request ) )
             $response = maybe_unserialize( wp_remote_retrieve_body( $request ) );
@@ -291,7 +412,7 @@ if ( ! function_exists( 'wpuxss_eml_pro_get_url' ) ) {
 
     function wpuxss_eml_pro_get_url() {
 
-        return 'https://www.wpuxsolutions.com/downloads/plugins/enhanced-media-library-pro/';
+        return 'https://wpuxsolutions.com/downloads/plugins/enhanced-media-library-pro/';
     }
 }
 

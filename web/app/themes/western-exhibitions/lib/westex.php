@@ -187,6 +187,13 @@ function theme_slug_editor_styles() {
 }
 add_action( 'after_setup_theme', 'theme_slug_editor_styles' );
 
+function westex_image_sizes() {
+  add_image_size( 'viewing-room', 720, 720 );
+  add_image_size( 'viewing-room-full', 2400, 500 );
+  add_image_size( 'slide-show', 500, 500 );
+}
+add_action( 'after_setup_theme', 'westex_image_sizes' );
+
 function theme_slug_custom_header_fonts() {
   wp_enqueue_style( 'theme-slug-fonts', theme_slug_fonts_url(), array(), null );
 }
@@ -240,3 +247,25 @@ function write_log ( $log )  {
     error_log( $log );
   }
 }
+
+function tock_header_script() {
+  ?>
+  <script>
+    !function(t,o,c,k){if(!t.tock){var e=t.tock=function(){e.callMethod?
+    e.callMethod.apply(e,arguments):e.queue.push(arguments)};t._tock||(t._tock=e),
+    e.push=e,e.loaded=!0,e.version='1.0',e.queue=[];var f=o.createElement(c);f.async=!0,
+    f.src=k;var g=o.getElementsByTagName(c)[0];g.parentNode.insertBefore(f,g)}}(
+    window,document,'script','https://www.exploretock.com/tock.js');
+
+    tock('init', 'westernexhibitions');
+    </script>
+  <?php
+}
+
+add_action('wp_head', 'tock_header_script');
+
+function tock_widget() {
+  return '<div class="btn btn-tock"><span data-tock-reserve="true" data-tock-offering="150586">Book Appointment</span></div>';
+}
+
+add_shortcode('tock-widget', 'tock_widget');

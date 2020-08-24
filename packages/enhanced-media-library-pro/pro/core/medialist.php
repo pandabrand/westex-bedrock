@@ -25,16 +25,16 @@ if ( ! function_exists( 'wpuxss_eml_pro_print_media_settings_templates' ) ) {
                 <select class="orderby" name="orderby"
                     data-setting="orderby">
                     <option value="date" <# if ( 'date' == wp.media.gallery.defaults.orderby ) { #>selected="selected"<# } #>>
-                        <?php esc_attr_e( 'Date', 'enhanced-media-library' ); ?>
+                        <?php _e( 'Date', 'enhanced-media-library' ); ?>
                     </option>
                     <option value="title" <# if ( 'title' == wp.media.gallery.defaults.orderby ) { #>selected="selected"<# } #>>
-                        <?php esc_attr_e( 'Title', 'enhanced-media-library' ); ?>
+                        <?php _e( 'Title', 'enhanced-media-library' ); ?>
                     </option>
                     <option value="menuOrder" <# if ( 'menuOrder' == wp.media.gallery.defaults.orderby ) { #>selected="selected"<# } #>>
-                        <?php esc_attr_e( 'Custom Order', 'enhanced-media-library' ); ?>
+                        <?php _e( 'Custom Order', 'enhanced-media-library' ); ?>
                     </option>
                     <option value="rand" <# if ( 'rand' == wp.media.gallery.defaults.orderby ) { #>selected="selected"<# } #>>
-                        <?php esc_attr_e( 'Random', 'enhanced-media-library' ); ?>
+                        <?php _e( 'Random', 'enhanced-media-library' ); ?>
                     </option>
                 </select>
             </label>
@@ -44,10 +44,10 @@ if ( ! function_exists( 'wpuxss_eml_pro_print_media_settings_templates' ) ) {
                 <select class="order" name="order"
                     data-setting="order">
                     <option value="ASC" <# if ( 'ASC' == wp.media.gallery.defaults.order ) { #>selected="selected"<# } #>>
-                        <?php esc_attr_e( 'Ascending', 'enhanced-media-library' ); ?>
+                        <?php _e( 'Ascending', 'enhanced-media-library' ); ?>
                     </option>
                     <option value="DESC" <# if ( 'DESC' == wp.media.gallery.defaults.order ) { #>selected="selected"<# } #>>
-                        <?php esc_attr_e( 'Descending', 'enhanced-media-library' ); ?>
+                        <?php _e( 'Descending', 'enhanced-media-library' ); ?>
                     </option>
                 </select>
             </label>
@@ -70,16 +70,16 @@ if ( ! function_exists( 'wpuxss_eml_pro_print_media_settings_templates' ) ) {
                 <select class="orderby" name="orderby"
                     data-setting="orderby">
                     <option value="date" <# if ( 'date' == wp.media.playlist.defaults.orderby ) { #>selected="selected"<# } #>>
-                        <?php esc_attr_e( 'Date', 'enhanced-media-library' ); ?>
+                        <?php _e( 'Date', 'enhanced-media-library' ); ?>
                     </option>
                     <option value="title" <# if ( 'title' == wp.media.playlist.defaults.orderby ) { #>selected="selected"<# } #>>
-                        <?php esc_attr_e( 'Title', 'enhanced-media-library' ); ?>
+                        <?php _e( 'Title', 'enhanced-media-library' ); ?>
                     </option>
                     <option value="menuOrder" <# if ( 'menuOrder' == wp.media.playlist.defaults.orderby ) { #>selected="selected"<# } #>>
-                        <?php esc_attr_e( 'Custom Order', 'enhanced-media-library' ); ?>
+                        <?php _e( 'Custom Order', 'enhanced-media-library' ); ?>
                     </option>
                     <option value="rand" <# if ( 'rand' == wp.media.playlist.defaults.orderby ) { #>selected="selected"<# } #>>
-                        <?php esc_attr_e( 'Random', 'enhanced-media-library' ); ?>
+                        <?php _e( 'Random', 'enhanced-media-library' ); ?>
                     </option>
                 </select>
             </label>
@@ -89,10 +89,10 @@ if ( ! function_exists( 'wpuxss_eml_pro_print_media_settings_templates' ) ) {
                 <select class="order" name="order"
                     data-setting="order">
                     <option value="ASC" <# if ( 'ASC' == wp.media.playlist.defaults.order ) { #>selected="selected"<# } #>>
-                        <?php esc_attr_e( 'Ascending', 'enhanced-media-library' ); ?>
+                        <?php _e( 'Ascending', 'enhanced-media-library' ); ?>
                     </option>
                     <option value="DESC" <# if ( 'DESC' == wp.media.playlist.defaults.order ) { #>selected="selected"<# } #>>
-                        <?php esc_attr_e( 'Descending', 'enhanced-media-library' ); ?>
+                        <?php _e( 'Descending', 'enhanced-media-library' ); ?>
                     </option>
                 </select>
             </label>

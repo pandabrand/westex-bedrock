@@ -1,10 +1,10 @@
 {
     "_readme": [
         "This file locks the dependencies of your project to a known state",
-        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
+        "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "d20527eceb3d3e5979fd249c501af9db",
+    "content-hash": "472978e4e7c113c464bd19dd71e3ee63",
     "packages": [
         {
             "name": "composer/installers",
@@ -112,14 +112,16 @@
             "dist": {
                 "type": "path",
                 "url": "packages/advanced-custom-fields-pro",
-                "reference": "1af93ec85bc9feaa6694d7370aa2b445f338a155",
-                "shasum": null
+                "reference": "1af93ec85bc9feaa6694d7370aa2b445f338a155"
             },
             "require": {
                 "composer/installers": "~1.0.12",
                 "php": ">=5.3.2"
             },
-            "type": "wordpress-plugin"
+            "type": "wordpress-plugin",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "johnpbloch/wordpress",
@@ -356,8 +358,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/all-in-one-wp-migration",
-                "reference": "15365d99eea1666a4aca2b7a7207805129274468",
-                "shasum": null
+                "reference": "15365d99eea1666a4aca2b7a7207805129274468"
             },
             "require": {
                 "composer/installers": "~1.0.12",
@@ -371,27 +372,29 @@
             "dist": {
                 "type": "path",
                 "url": "packages/wpai-acf-add-on",
-                "reference": "d2ef7d108a9b8145871d1330825d6009b167f68d",
-                "shasum": null
+                "reference": "d2ef7d108a9b8145871d1330825d6009b167f68d"
             },
             "require": {
                 "composer/installers": "~1.0.12",
                 "php": ">=5.3.2"
             },
-            "type": "wordpress-plugin"
+            "type": "wordpress-plugin",
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "symfony/polyfill-ctype",
-            "version": "v1.13.1",
+            "version": "v1.18.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/polyfill-ctype.git",
-                "reference": "f8f0b461be3385e56d6de3dbb5a0df24c0c275e3"
+                "reference": "1c302646f6efc070cd46856e600e5e0684d6b454"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/f8f0b461be3385e56d6de3dbb5a0df24c0c275e3",
-                "reference": "f8f0b461be3385e56d6de3dbb5a0df24c0c275e3",
+                "url": "https://api.github.com/repos/symfony/polyfill-ctype/zipball/1c302646f6efc070cd46856e600e5e0684d6b454",
+                "reference": "1c302646f6efc070cd46856e600e5e0684d6b454",
                 "shasum": ""
             },
             "require": {
@@ -403,7 +406,11 @@
             "type": "library",
             "extra": {
                 "branch-alias": {
-                    "dev-master": "1.13-dev"
+                    "dev-master": "1.18-dev"
+                },
+                "thanks": {
+                    "name": "symfony/polyfill",
+                    "url": "https://github.com/symfony/polyfill"
                 }
             },
             "autoload": {
@@ -436,28 +443,48 @@
                 "polyfill",
                 "portable"
             ],
-            "time": "2019-11-27T13:56:44+00:00"
+            "funding": [
+                {
+                    "url": "https://symfony.com/sponsor",
+                    "type": "custom"
+                },
+                {
+                    "url": "https://github.com/fabpot",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/symfony/symfony",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-07-14T12:35:20+00:00"
         },
         {
             "name": "vlucas/phpdotenv",
-            "version": "v2.6.1",
+            "version": "v2.6.6",
             "source": {
                 "type": "git",
                 "url": "https://github.com/vlucas/phpdotenv.git",
-                "reference": "2a7dcf7e3e02dc5e701004e51a6f304b713107d5"
+                "reference": "e1d57f62db3db00d9139078cbedf262280701479"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/2a7dcf7e3e02dc5e701004e51a6f304b713107d5",
-                "reference": "2a7dcf7e3e02dc5e701004e51a6f304b713107d5",
+                "url": "https://api.github.com/repos/vlucas/phpdotenv/zipball/e1d57f62db3db00d9139078cbedf262280701479",
+                "reference": "e1d57f62db3db00d9139078cbedf262280701479",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.9",
-                "symfony/polyfill-ctype": "^1.9"
+                "php": "^5.3.9 || ^7.0 || ^8.0",
+                "symfony/polyfill-ctype": "^1.17"
             },
             "require-dev": {
-                "phpunit/phpunit": "^4.8.35 || ^5.0"
+                "ext-filter": "*",
+                "ext-pcre": "*",
+                "phpunit/phpunit": "^4.8.35 || ^5.7.27"
+            },
+            "suggest": {
+                "ext-filter": "Required to use the boolean validator.",
+                "ext-pcre": "Required to use most of the library."
             },
             "type": "library",
             "extra": {
@@ -476,9 +503,14 @@
             ],
             "authors": [
                 {
+                    "name": "Graham Campbell",
+                    "email": "graham@alt-three.com",
+                    "homepage": "https://gjcampbell.co.uk/"
+                },
+                {
                     "name": "Vance Lucas",
                     "email": "vance@vancelucas.com",
-                    "homepage": "http://www.vancelucas.com"
+                    "homepage": "https://vancelucas.com/"
                 }
             ],
             "description": "Loads environment variables from `.env` to `getenv()`, `$_ENV` and `$_SERVER` automagically.",
@@ -487,7 +519,17 @@
                 "env",
                 "environment"
             ],
-            "time": "2019-01-29T11:11:52+00:00"
+            "funding": [
+                {
+                    "url": "https://github.com/GrahamCampbell",
+                    "type": "github"
+                },
+                {
+                    "url": "https://tidelift.com/funding/github/packagist/vlucas/phpdotenv",
+                    "type": "tidelift"
+                }
+            ],
+            "time": "2020-07-14T17:54:18+00:00"
         },
         {
             "name": "wpUXsolutions/enhanced-media-library-pro",
@@ -495,8 +537,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/enhanced-media-library-pro",
-                "reference": "b026672de3f0fa21b64f47c23866a7fc9d34457b",
-                "shasum": null
+                "reference": "b026672de3f0fa21b64f47c23866a7fc9d34457b"
             },
             "require": {
                 "composer/installers": "~1.0.12",
@@ -514,9 +555,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/blackbar.2.2.1.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://downloads.wordpress.org/plugin/blackbar.2.2.1.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -534,9 +573,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.0.31.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://downloads.wordpress.org/plugin/ninja-forms.3.0.31.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -554,9 +591,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/regenerate-thumbnails.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://downloads.wordpress.org/plugin/regenerate-thumbnails.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -575,9 +610,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/video-embed-thumbnail-generator.4.6.17.zip",
-                "reference": null,
-                "shasum": null
+                "url": "https://downloads.wordpress.org/plugin/video-embed-thumbnail-generator.4.6.17.zip"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -595,9 +628,7 @@
             },
             "dist": {
                 "type": "zip",
-                "url": "https://downloads.wordpress.org/plugin/wp-all-import.zip?timestamp=1487705338",
-                "reference": null,
-                "shasum": null
+                "url": "https://downloads.wordpress.org/plugin/wp-all-import.zip?timestamp=1487705338"
             },
             "require": {
                 "composer/installers": "~1.0"
@@ -699,5 +730,6 @@
     "platform": {
         "php": ">=5.6"
     },
-    "platform-dev": []
+    "platform-dev": [],
+    "plugin-api-version": "1.1.0"
 }

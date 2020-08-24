@@ -1,0 +1,11 @@
+.btn-tock {
+  color: $color__link;
+  border: 1px solid $color__link;
+  border-radius: 0px;
+  font-family: $lato;
+
+  &:hover {
+    color: invert($color__link, 100%);
+    background-color: $color__link;
+  }
+}

@@ -1,6 +1,6 @@
 <?php
 /**
- * Copyright (C) 2014-2017 ServMask Inc.
+ * Copyright (C) 2014-2020 ServMask Inc.
  *
  * This program is free software: you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -22,6 +22,10 @@
  * ███████║███████╗██║  ██║ ╚████╔╝ ██║ ╚═╝ ██║██║  ██║███████║██║  ██╗
  * ╚══════╝╚══════╝╚═╝  ╚═╝  ╚═══╝  ╚═╝     ╚═╝╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
  */
+
+if ( ! defined( 'ABSPATH' ) ) {
+	die( 'Kangaroos cannot jump here' );
+}
 
 class Ai1wm_Updater_Controller {
 
@@ -52,24 +56,33 @@ class Ai1wm_Updater_Controller {
 		return Ai1wm_Updater::plugin_row_meta( $links, $file );
 	}
 
-	public static function updater() {
-		$extensions = Ai1wm_Extensions::get();
+	public static function updater( $params = array() ) {
+		if ( check_ajax_referer( 'ai1wm_updater', 'ai1wm_nonce' ) ) {
+			ai1wm_setup_environment();
 
-		// Set uuid
-		$uuid = null;
-		if ( isset( $_POST['ai1wm_uuid'] ) ) {
-			$uuid = trim( $_POST['ai1wm_uuid'] );
-		}
+			// Set params
+			if ( empty( $params ) ) {
+				$params = stripslashes_deep( $_POST );
+			}
 
-		// Set extension
-		$extension = null;
-		if ( isset( $_POST['ai1wm_extension'] ) ) {
-			$extension = trim( $_POST['ai1wm_extension'] );
-		}
+			// Set uuid
+			$uuid = null;
+			if ( isset( $params['ai1wm_uuid'] ) ) {
+				$uuid = trim( $params['ai1wm_uuid'] );
+			}
 
-		// Verify whether extension exists
-		if ( isset( $extensions[ $extension ] ) ) {
-			update_option( $extensions[ $extension ]['key'], $uuid );
+			// Set extension
+			$extension = null;
+			if ( isset( $params['ai1wm_extension'] ) ) {
+				$extension = trim( $params['ai1wm_extension'] );
+			}
+
+			$extensions = Ai1wm_Extensions::get();
+
+			// Verify whether extension exists
+			if ( isset( $extensions[ $extension ] ) ) {
+				update_option( $extensions[ $extension ]['key'], $uuid );
+			}
 		}
 	}
 }

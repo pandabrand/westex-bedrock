@@ -22,12 +22,15 @@ window.eml = window.eml || { l10n: {} };
             });
 
             media.view.MediaFrame.Select.prototype.initialize.apply( this, arguments );
-            media.model.Query.cleanQueries();
         },
 
         createStates: function() {
 
             var options = this.options;
+
+            if ( this.options.states ) {
+                return;
+            }
 
             // Add the default states.
             this.states.add([
@@ -64,43 +67,6 @@ window.eml = window.eml || { l10n: {} };
             this.on( 'toolbar:render:bulk-edit', this.bulkEditToolbar, this );
 
             this.on( 'open', this.selectAll, this );
-        },
-
-        selectAll: function() {
-
-            var library = this.state().get('library'),
-                selection = this.state().get('selection'),
-                $spinner = this.content.get().toolbar.$el.find('.spinner');
-
-
-            if ( library.length ) {
-
-                this.$el.find('.media-frame-toolbar .select-all').click();
-                return;
-
-            }
-
-            $spinner.show();
-            loadAll();
-
-            function loadAll() {
-
-                library.more().done( function( resp ) {
-
-                    selection.reset( this.models );
-
-                    selection.trigger( 'selection:unsingle', selection.model, selection );
-                    selection.trigger( 'selection:single', selection.model, selection );
-
-                    if ( this._hasMore ) {
-                        $spinner.show();
-                        loadAll();
-                    }
-                    else {
-                        $spinner.hide();
-                    }
-                });
-            }
         },
 
         selectionStatusToolbar: function( view ) {
