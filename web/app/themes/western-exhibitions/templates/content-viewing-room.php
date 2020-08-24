@@ -49,7 +49,7 @@ if( have_rows('westex_blocks') ):
         case 'slideshow_block':
             set_query_var( 'images', get_sub_field('slideshow_images') );
             set_query_var( 'slideshow_size', 'slide-show' );
-            set_query_var( 'slideshow_image_class', array('class' => 'd-block w-100 img-fluid') );
+            set_query_var( 'slideshow_image_class', array('class' => 'd-block img-fluid') );
             get_template_part( 'partials/block', 'slideshow' );
         break;
 
