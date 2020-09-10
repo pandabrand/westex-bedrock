@@ -4,16 +4,11 @@
   div[class*='westex-vr-'] {
 
     padding-bottom: 5rem;
-    border-top: 1px solid #ff0000;
     margin-bottom: 2rem;
     padding-top: 2rem;
 
     &:first-of-type {
       padding-top: 5rem;
-    }
-
-    &:last-of-type {
-      border-bottom: 1px solid #ff0000;
     }
   }
 
