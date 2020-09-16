@@ -50,9 +50,6 @@
             <?php endif; ?>
           <?php endif; ?>
           <div class="c-front-gallery_smalltype u-extra-v-margin u-label-font"><?php the_field('start_date'); ?> - <?php the_field('end_date'); ?></div>
-          <?php $today = date('Ymd'); if(get_field('opening_reception') <= $today): ?>
-            <div>Opening Reception <?php the_field('opening_reception'); ?></div>
-          <?php endif; ?>
         </div>
         <?php echo tock_widget(); ?>
       </div>

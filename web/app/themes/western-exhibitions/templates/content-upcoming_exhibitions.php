@@ -87,9 +87,6 @@
                 <?php endif; ?>
               <?php endif; ?>
               <div class="c-front-gallery_smalltype u-label-font"><?php the_field('start_date'); ?> - <?php the_field('end_date'); ?></div>
-              <?php $today = date('Ymd'); if(get_field('opening_reception') > $today): ?>
-                <div class="c-front-gallery_smalltype u-label-font">Opening Reception <?php the_field('opening_reception'); ?></div>
-              <?php endif; ?>
               <div>
                 <?php if ( has_post_thumbnail() ) : ?>
                     <a href="<?php the_permalink(); ?>" title="<?php the_title_attribute(); ?>">

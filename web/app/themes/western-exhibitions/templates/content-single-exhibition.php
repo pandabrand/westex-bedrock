@@ -53,9 +53,6 @@
           }
         ?>
       </div>
-      <?php $today = date('Ymd'); if(get_field('opening_reception') < $today): ?>
-        <div class="u-label-font">Opening Reception <?php the_field('opening_reception'); ?></div>
-      <?php endif; ?>
       <div class="l-exhibition-featured-image mb-5">
         <?php $alt_string = str_replace(PHP_EOL, '', get_the_title(get_post_thumbnail_id()).' '.get_post(get_post_thumbnail_id())->post_content); ?>
         <?php the_post_thumbnail('full', array('class' => 'img-fluid', 'alt' => $alt_string)); ?>
