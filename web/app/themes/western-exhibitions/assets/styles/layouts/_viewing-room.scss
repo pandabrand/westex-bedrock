@@ -21,7 +21,6 @@
         top: 0;
         left: 2.5rem;
         bottom: 3.5rem;
-        border-bottom: dashed 1px rgba(15, 15, 15, 0.45);
         width: 80%;
 
         @include media-breakpoint-up(md) {
@@ -89,6 +88,11 @@
       .carousel-item {
         justify-content: center;
         max-height: 700px;
+
+        .carousel-caption {
+          bottom: 0;
+          background-color: rgba(15, 15, 15, 0.15);
+        }
       }
 
       .carousel-control {

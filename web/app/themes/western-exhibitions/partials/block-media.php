@@ -4,6 +4,11 @@
       <div class="embed-container">
         <?php echo $media; ?>
       </div>
+      <?php if( $media_caption ): ?>
+        <div class="caption">
+          <?php echo $media_caption; ?>
+        </div>
+      <?php endif; ?>
     </div>
   </div>
 </div>

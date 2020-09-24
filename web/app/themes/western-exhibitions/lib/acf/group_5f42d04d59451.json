@@ -40,6 +40,31 @@
                             "maxlength": "",
                             "rows": 3,
                             "new_lines": "br"
+                        },
+                        {
+                            "key": "field_5f6c0c9d7cc6d",
+                            "label": "Artist",
+                            "name": "artist",
+                            "type": "relationship",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "post_type": [
+                                "artist"
+                            ],
+                            "taxonomy": "",
+                            "filters": [
+                                "search"
+                            ],
+                            "elements": "",
+                            "min": "",
+                            "max": "",
+                            "return_format": "object"
                         }
                     ],
                     "min": "",
@@ -87,6 +112,35 @@
                     "sub_fields": [
                         {
                             "key": "field_5f42d304e35de",
+                            "label": "Text Body",
+                            "name": "text_body",
+                            "type": "wysiwyg",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "tabs": "all",
+                            "toolbar": "full",
+                            "media_upload": 0,
+                            "delay": 0
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
+                },
+                "layout_5f6c0bd269b83": {
+                    "key": "layout_5f6c0bd269b83",
+                    "name": "wide_text_block",
+                    "label": "Wide Text Block",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_5f6c0bd269b84",
                             "label": "Text Body",
                             "name": "text_body",
                             "type": "wysiwyg",
@@ -175,6 +229,25 @@
                             "ui": 1,
                             "ui_on_text": "Left",
                             "ui_off_text": "Right"
+                        },
+                        {
+                            "key": "field_5f6c05bbd6daa",
+                            "label": "Image Caption",
+                            "name": "image_caption",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
                         }
                     ],
                     "min": "",
@@ -233,6 +306,44 @@
                             "max_height": "",
                             "max_size": "",
                             "mime_types": ""
+                        },
+                        {
+                            "key": "field_5f6c05e7d6dab",
+                            "label": "Image One Caption",
+                            "name": "image_one_caption",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
+                        },
+                        {
+                            "key": "field_5f6c05f3d6dac",
+                            "label": "Image Two Caption",
+                            "name": "image_two_caption",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
                         }
                     ],
                     "min": "",
@@ -288,6 +399,25 @@
                             },
                             "width": "",
                             "height": ""
+                        },
+                        {
+                            "key": "field_5f6c0a5d69b82",
+                            "label": "media_caption",
+                            "name": "media_caption",
+                            "type": "text",
+                            "instructions": "",
+                            "required": 0,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "default_value": "",
+                            "placeholder": "",
+                            "prepend": "",
+                            "append": "",
+                            "maxlength": ""
                         }
                     ],
                     "min": "",
@@ -341,6 +471,25 @@
                                     "max_height": "",
                                     "max_size": "",
                                     "mime_types": ""
+                                },
+                                {
+                                    "key": "field_5f6c0612d6dad",
+                                    "label": "Image Caption",
+                                    "name": "image_caption",
+                                    "type": "text",
+                                    "instructions": "",
+                                    "required": 0,
+                                    "conditional_logic": 0,
+                                    "wrapper": {
+                                        "width": "",
+                                        "class": "",
+                                        "id": ""
+                                    },
+                                    "default_value": "",
+                                    "placeholder": "",
+                                    "prepend": "",
+                                    "append": "",
+                                    "maxlength": ""
                                 }
                             ]
                         }
@@ -380,5 +529,5 @@
     ],
     "active": true,
     "description": "",
-    "modified": 1598237003
+    "modified": 1600917026
 }

@@ -7,6 +7,11 @@
             <?php $active_class = $idx == 0 ? ' active' : ''; ?>
             <div class="carousel-item<?php echo $active_class; ?>">
               <?php echo wp_get_attachment_image( $image['image'], $slideshow_size, false, $slideshow_image_class ); ?>
+              <?php if( isset( $image['image_caption'] ) && !empty( $image['image_caption'] ) ): ?>
+                <div class="carousel-caption d-none d-md-block">
+                  <p><?php echo $image['image_caption']; ?></p>
+                </div>
+              <?php endif; ?>
             </div>
           <?php endforeach; ?>
         </div>

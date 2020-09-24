@@ -9,6 +9,7 @@ if( have_rows('westex_blocks') ):
       switch( $layout ):
         case 'title_block':
             set_query_var( 'title', get_sub_field('title') );
+            set_query_var( 'artist', get_sub_field('artist') );
             get_template_part( 'partials/block', 'title' );
           break;
 
@@ -21,6 +22,7 @@ if( have_rows('westex_blocks') ):
 
         case 'two_column_block':
             set_query_var( 'image', get_sub_field('image') );
+            set_query_var( 'image_caption', get_sub_field('image_caption') );
             set_query_var( 'tc_image_size', 'viewing-room' );
             set_query_var( 'tc_classes', array( 'class' => 'img-fluid' ) );
             set_query_var( 'placement', get_sub_field('image_placement') );
@@ -31,6 +33,8 @@ if( have_rows('westex_blocks') ):
         case 'two_column_image_block':
             set_query_var( 'image_one', get_sub_field('image_one') );
             set_query_var( 'image_two', get_sub_field('image_two') );
+            set_query_var( 'image_one_caption', get_sub_field('image_one_caption') );
+            set_query_var( 'image_two_caption', get_sub_field('image_two_caption') );
             set_query_var( 'tc_image_size', 'viewing-room' );
             set_query_var( 'tc_classes', array( 'class' => 'img-fluid' ) );
             get_template_part( 'partials/block', 'two-column-image' );
@@ -43,6 +47,7 @@ if( have_rows('westex_blocks') ):
 
         case 'embed_media_block':
             set_query_var( 'media', get_sub_field('media') );
+            set_query_var( 'media_caption', get_sub_field('media_caption') );
             get_template_part( 'partials/block', 'media' );
         break;
 
@@ -56,6 +61,11 @@ if( have_rows('westex_blocks') ):
         case 'text_block':
             set_query_var( 'body', get_sub_field('text_body') );
             get_template_part( 'partials/block', 'text' );
+        break;
+
+        case 'wide_text_block':
+            set_query_var( 'body', get_sub_field('text_body') );
+            get_template_part( 'partials/block', 'text-wide' );
         break;
 
       endswitch;
