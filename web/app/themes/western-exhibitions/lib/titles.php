@@ -12,6 +12,8 @@ function title() {
     } else {
       return __('Latest Posts', 'sage');
     }
+  } elseif ( is_post_type_archive( array( 'in-depth' ) ) ) {
+    return __('In Depth with …', 'sage');
   } elseif (is_archive()) {
     return get_the_archive_title();
   } elseif (is_search()) {

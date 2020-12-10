@@ -92,8 +92,8 @@ function display_sidebar() {
     // is_page_template('template-previous_exhibitions.php'),
     is_page_template('template-upcoming_exhibitions.php'),
     is_page_template('template-viewing-room.php'),
-    is_post_type_archive(array('artist', 'art_fair')),
-    is_singular(array('exhibition'))
+    is_post_type_archive(array('artist', 'art_fair', 'in-depth')),
+    is_singular(array('exhibition', 'in-depth'))
   ]);
 
   return apply_filters('sage/display_sidebar', $display);

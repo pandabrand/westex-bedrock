@@ -1,6 +1,6 @@
 {
     "key": "group_5f42d04d59451",
-    "title": "Viewing Room Blocks",
+    "title": "In Depth Pages",
     "fields": [
         {
             "key": "field_5f42d0e3e35d8",
@@ -496,19 +496,117 @@
                     ],
                     "min": "",
                     "max": ""
+                },
+                "layout_5f75122cc321f": {
+                    "key": "layout_5f75122cc321f",
+                    "name": "gallery_block",
+                    "label": "Gallery Block",
+                    "display": "block",
+                    "sub_fields": [
+                        {
+                            "key": "field_5f75122cc3220",
+                            "label": "Gallery Images",
+                            "name": "gallery_images",
+                            "type": "gallery",
+                            "instructions": "",
+                            "required": 1,
+                            "conditional_logic": 0,
+                            "wrapper": {
+                                "width": "",
+                                "class": "",
+                                "id": ""
+                            },
+                            "return_format": "array",
+                            "preview_size": "medium",
+                            "insert": "append",
+                            "library": "all",
+                            "min": "",
+                            "max": "",
+                            "min_width": "",
+                            "min_height": "",
+                            "min_size": "",
+                            "max_width": "",
+                            "max_height": "",
+                            "max_size": "",
+                            "mime_types": ""
+                        }
+                    ],
+                    "min": "",
+                    "max": ""
                 }
             },
             "button_label": "Add Block",
             "min": "",
             "max": ""
+        },
+        {
+            "key": "field_5f6d5c192a55c",
+            "label": "Start Date",
+            "name": "start_date",
+            "type": "date_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "display_format": "m\/d\/Y",
+            "return_format": "F j, Y",
+            "first_day": 0
+        },
+        {
+            "key": "field_5f6d5c442a55d",
+            "label": "End Date",
+            "name": "end_date",
+            "type": "date_picker",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "display_format": "m\/d\/Y",
+            "return_format": "F j, Y",
+            "first_day": 0
+        },
+        {
+            "key": "field_5f6e49208bf3c",
+            "label": "Artist",
+            "name": "artist",
+            "type": "relationship",
+            "instructions": "",
+            "required": 0,
+            "conditional_logic": 0,
+            "wrapper": {
+                "width": "",
+                "class": "",
+                "id": ""
+            },
+            "post_type": [
+                "artist"
+            ],
+            "taxonomy": "",
+            "filters": [
+                "search"
+            ],
+            "elements": [
+                "featured_image"
+            ],
+            "min": "",
+            "max": 1,
+            "return_format": "object"
         }
     ],
     "location": [
         [
             {
-                "param": "page_template",
+                "param": "post_type",
                 "operator": "==",
-                "value": "template-viewing-room.php"
+                "value": "in-depth"
             }
         ]
     ],
@@ -524,10 +622,9 @@
         "comments",
         "format",
         "page_attributes",
-        "featured_image",
         "send-trackbacks"
     ],
     "active": true,
     "description": "",
-    "modified": 1600917026
+    "modified": 1601508673
 }

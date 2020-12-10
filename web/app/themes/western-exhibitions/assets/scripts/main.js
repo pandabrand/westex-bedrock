@@ -27,7 +27,7 @@
     'home': {
       init: function() {
         // JavaScript to be fired on the home page
-        $('.jsExhibitonLink').click(function() {
+        $('.jsExhibitonLink').on('click', function() {
           var exhibition_link = this.getAttribute('data-url');
           window.open(exhibition_link, '_self');
         });
@@ -103,6 +103,6 @@
   };
 
   // Load Events
-  $(document).ready(UTIL.loadEvents);
+  $(UTIL.loadEvents);
 
 })(jQuery); // Fully reference jQuery after this point.

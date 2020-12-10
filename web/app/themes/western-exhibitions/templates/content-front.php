@@ -46,6 +46,7 @@
 <div class="l-front-page_content">
   <div class="container">
     <div class="row">
+      <?php get_template_part( 'partials/in-depth_front' ); ?>
       <div class="col-md-6">
         <?php if(get_field('show_notice')): ?>
           <div class="row">
