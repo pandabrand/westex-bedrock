@@ -1,8 +1,9 @@
 <?php
-$today = date('YMD');
+$today = date('Ymd');
 $args = array(
   'numberofposts' => 1,
   'post_type' => 'in-depth',
+  'post_parent' => 0,
   'meta_query' => array(
     array(
       'key' => 'start_date',

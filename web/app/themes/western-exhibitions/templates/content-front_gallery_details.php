@@ -51,7 +51,6 @@
           <?php endif; ?>
           <div class="c-front-gallery_smalltype u-extra-v-margin u-label-font"><?php the_field('start_date'); ?> - <?php the_field('end_date'); ?></div>
         </div>
-        <?php echo tock_widget(); ?>
       </div>
       <div class="col-md-6 pr-0">
         <?php if ( has_post_thumbnail() ) : ?>

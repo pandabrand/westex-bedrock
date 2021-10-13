@@ -20,7 +20,9 @@
         11am to 5pm
       </div>
       <div class="tock-footer">
-        <?php echo tock_widget(); ?>
+        <a href="mailto:info@westernexhibitions.com?subject=Book%20Appointment" class="btn btn-tock">
+          <span>Book Appointment</span>
+        </a>
       </div>
       <?php dynamic_sidebar('sidebar-footer'); ?>
     </div>

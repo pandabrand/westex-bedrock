@@ -1,5 +1,5 @@
 <div class="container westex-vr-two-column-image">
-  <div class="row<?php echo $tc_class; ?>">
+  <div class="row">
     <div class="col-sm-12 col-md-6">
       <figure>
         <?php echo wp_get_attachment_image( $image_one, $tc_image_size, false, $tc_classes );?>

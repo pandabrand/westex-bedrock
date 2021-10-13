@@ -12,7 +12,7 @@
       <div class="p-1 text-center">
         <div class="h4"><?php the_title(); ?></div>
         <div class="strong pr-2"><?php echo $artist_array[0]->post_title; ?></div>
-        <div class="c-front-gallery_h1 emphasis"><?php echo $in_depth_post->post_title; ?></div>
+        <div class="c-front-gallery_h1 emphasis"><?php echo esc_html(get_the_title()); ?></div>
         <div class="c-front-gallery_smalltype u-label-font"><?php echo $start_date, ' - ', $end_date; ?></div>
       </div>
     </div>

@@ -32,38 +32,39 @@ function wpsites_query( $query ) {
 
   if( is_home() ) {
     $today = date('Ymd');
-    $query->set('meta_query', array(
-      'relation' => 'OR',
-      array(
-        'key' => 'web_display_start_date',
-        'compare' => '<=',
-        'value' => $today,
-      ),
-      array(
-        'relation' => 'AND',
-        array(
-          'key'     => 'start_date',
-          'compare' => 'EXISTS'
-        ),
-        array(
-          'key'     => 'web_display_start_date',
-          'compare' => 'NOT EXISTS',
-        ),
-      ),
-      array(
-        'relation' => 'AND',
-        array(
-          'key'     => 'start_date',
-          'compare' => 'NOT EXISTS'
-        ),
-        array(
-          'key'     => 'web_display_start_date',
-          'compare' => 'NOT EXISTS',
-        ),
-      ),
-    ));
+    // $query->set('meta_query', array(
+    //   'relation' => 'OR',
+    //   array(
+    //     'key' => 'web_display_start_date',
+    //     'compare' => '<=',
+    //     'value' => $today,
+    //   ),
+    //   array(
+    //     'relation' => 'AND',
+    //     array(
+    //       'key'     => 'start_date',
+    //       'compare' => 'EXISTS'
+    //     ),
+    //     array(
+    //       'key'     => 'web_display_start_date',
+    //       'compare' => 'NOT EXISTS',
+    //     ),
+    //   ),
+    //   array(
+    //     'relation' => 'AND',
+    //     array(
+    //       'key'     => 'start_date',
+    //       'compare' => 'NOT EXISTS'
+    //     ),
+    //     array(
+    //       'key'     => 'web_display_start_date',
+    //       'compare' => 'NOT EXISTS',
+    //     ),
+    //   ),
+    // ));
     $query->set( 'posts_per_page', 12 );
-    $query->set('orderby', 'meta_value_num post_date');
+    $query->set( 'orderby', 'meta_value_num post_date' );
+    $query->set( 'order', 'DESC' );
   }
 
   if ( $query->is_archive() && $query->is_main_query() && !is_admin() ) {
@@ -92,7 +93,6 @@ function wpsites_query( $query ) {
       $query->set('meta_key', 'artist_sort_order');
       $query->set('orderby', 'meta_value_num');
       $query->set('order', 'ASC');
-      return;
     }
 
     if(is_post_type_archive( 'art_fair' )) {
@@ -116,6 +116,10 @@ function wpsites_query( $query ) {
       $query->set('orderby', 'meta_value_num');
       $query->set('order', 'DESC');
       // return;
+    }
+
+    if (is_post_type_archive('in-depth')) {
+      $query->set('post_parent', 0);
     }
 
   }
@@ -189,6 +193,7 @@ add_action( 'after_setup_theme', 'theme_slug_editor_styles' );
 
 function westex_image_sizes() {
   add_image_size( 'viewing-room', 720, 720 );
+  add_image_size( 'viewing-room-large', 1440, 810 );
   add_image_size( 'viewing-room-full', 2400, 500 );
   add_image_size( 'slide-show', 500, 500 );
 }
