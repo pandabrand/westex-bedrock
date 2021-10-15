@@ -1,4 +1,4 @@
-<div class="container westex-vr-iamge">
+<div class="container westex-vr-iamge<?php echo $narrow_class ? ' narrow' : ''; ?>">
   <div class="row justify-content-center">
     <div class="col-sm-12">
       <div class="image-container d-flex justify-content-center align-items-center">

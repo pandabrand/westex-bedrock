@@ -1,4 +1,4 @@
-<div class="container westex-vr-two-column-image">
+<div class="container westex-vr-two-column-image<?php echo $narrow_class ? ' narrow' : ''; ?>">
   <div class="row">
     <div class="col-sm-12 col-md-6">
       <figure>

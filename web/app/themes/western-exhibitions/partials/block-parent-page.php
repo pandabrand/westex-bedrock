@@ -1,4 +1,4 @@
-<div class="container westex-vr-parent-page">
+<div class="container westex-vr-parent-page<?php echo $narrow_class ? ' narrow' : ''; ?>">
   <div class="row">
     <div class="col-sm-12">
       <h2><a href="<?php echo $child_page_link; ?>"><?php echo $title; ?></a></h2>

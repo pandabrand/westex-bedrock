@@ -2,7 +2,7 @@
 $tc_class = $placement == 1 ? ' flex-row' : ' flex-row-reverse';
 ?>
 
-<div class="container westex-vr-two-column">
+<div class="container westex-vr-two-column<?php echo $narrow_class ? ' narrow' : ''; ?>">
   <div class="row<?php echo $tc_class; ?>">
     <div class="col-sm-12 col-md-6">
       <figure>

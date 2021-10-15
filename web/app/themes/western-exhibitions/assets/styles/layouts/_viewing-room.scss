@@ -2,8 +2,7 @@
 .single-in-depth {
   overflow-x: hidden;
 
-  div[class*='westex-vr-'] {
-
+  div[class*="westex-vr-"] {
     padding-bottom: 5rem;
     margin-bottom: 2rem;
     padding-top: 2rem;
@@ -11,10 +10,14 @@
     &:first-of-type {
       padding-top: 5rem;
     }
+
+    &.narrow {
+      padding-bottom: 0;
+      margin-bottom: 0;
+    }
   }
 
-  .westex-vr {
-
+  div.westex-vr {
     &-title {
       &::after {
         position: absolute;
@@ -77,11 +80,11 @@
         iframe,
         object,
         embed {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
         }
       }
     }

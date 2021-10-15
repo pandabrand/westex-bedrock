@@ -50,6 +50,7 @@ if (have_rows('westex_blocks')) :
       case 'title_block':
           set_query_var( 'title', get_sub_field('title') );
           set_query_var( 'artist', get_sub_field('artist') );
+          set_query_var( 'narrow_class', get_sub_field('narrow_vertical_spacing') );
           get_template_part( 'partials/block', 'title' );
         break;
 
@@ -57,6 +58,7 @@ if (have_rows('westex_blocks')) :
           set_query_var( 'image', get_sub_field('image') );
           set_query_var( 'fw_image_size', 'viewing-room-full img-fluid' );
           set_query_var( 'image_classes', array( 'img-fw' ) );
+          set_query_var( 'narrow_class', get_sub_field('narrow_vertical_spacing') );
           get_template_part( 'partials/block', 'full-width-image' );
       break;
 
@@ -67,6 +69,7 @@ if (have_rows('westex_blocks')) :
           set_query_var( 'tc_classes', array( 'class' => 'img-fluid' ) );
           set_query_var( 'placement', get_sub_field('image_placement') );
           set_query_var( 'body', get_sub_field('text_body') );
+          set_query_var( 'narrow_class', get_sub_field('narrow_vertical_spacing') );
           get_template_part( 'partials/block', 'two-column' );
       break;
 
@@ -77,17 +80,20 @@ if (have_rows('westex_blocks')) :
           set_query_var( 'image_two_caption', get_sub_field('image_two_caption') );
           set_query_var( 'tc_image_size', 'viewing-room' );
           set_query_var( 'tc_classes', array( 'class' => 'img-fluid' ) );
+          set_query_var( 'narrow_class', get_sub_field('narrow_vertical_spacing') );
           get_template_part( 'partials/block', 'two-column-image' );
       break;
 
       case 'quote_block':
           set_query_var( 'quote', get_sub_field('quote') );
+          set_query_var( 'narrow_class', get_sub_field('narrow_vertical_spacing') );
           get_template_part( 'partials/block', 'quote' );
       break;
 
       case 'embed_media_block':
           set_query_var( 'media', get_sub_field('media') );
           set_query_var( 'media_caption', get_sub_field('media_caption') );
+          set_query_var( 'narrow_class', get_sub_field('narrow_vertical_spacing') );
           get_template_part( 'partials/block', 'media' );
       break;
 
@@ -95,21 +101,25 @@ if (have_rows('westex_blocks')) :
           set_query_var( 'images', get_sub_field('slideshow_images') );
           set_query_var( 'slideshow_size', 'slide-show' );
           set_query_var( 'slideshow_image_class', array('class' => 'd-block img-fluid') );
+          set_query_var( 'narrow_class', get_sub_field('narrow_vertical_spacing') );
           get_template_part( 'partials/block', 'slideshow' );
       break;
 
       case 'text_block':
           set_query_var( 'body', get_sub_field('text_body') );
+          set_query_var( 'narrow_class', get_sub_field('narrow_vertical_spacing') );
           get_template_part( 'partials/block', 'text' );
       break;
 
       case 'wide_text_block':
           set_query_var( 'body', get_sub_field('text_body') );
+          set_query_var( 'narrow_class', get_sub_field('narrow_vertical_spacing') );
           get_template_part( 'partials/block', 'text-wide' );
       break;
 
       case 'gallery_block':
           set_query_var( 'gallery_images', get_sub_field('gallery_images') );
+          set_query_var( 'narrow_class', get_sub_field('narrow_vertical_spacing') );
           get_template_part( 'partials/block', 'gallery' );
       break;
 
@@ -118,6 +128,7 @@ if (have_rows('westex_blocks')) :
           set_query_var( 'image_caption', get_sub_field('image_caption') );
           set_query_var( 'tc_image_size', 'viewing-room-large' );
           set_query_var( 'tc_classes', array( 'class' => 'img-fluid' ) );
+          set_query_var( 'narrow_class', get_sub_field('narrow_vertical_spacing') );
           get_template_part( 'partials/block', 'image' );
       break;
 
@@ -131,6 +142,7 @@ if (have_rows('westex_blocks')) :
         set_query_var('image_caption', get_sub_field('image_caption'));
         set_query_var('tc_image_size', 'viewing-room-large');
         set_query_var('tc_classes', array('class' => 'img-fluid'));
+        set_query_var( 'narrow_class', get_sub_field('narrow_vertical_spacing') );
         get_template_part('partials/block', 'parent-page');
       break;
     endswitch;

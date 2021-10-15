@@ -1,4 +1,4 @@
-<div class="container westex-vr-slideshow">
+<div class="container westex-vr-slideshow<?php echo $narrow_class ? ' narrow' : ''; ?>">
   <div class="row justify-content-center">
     <div class="col-sm-12">
       <div id="westex-slide" class="carousel slide" data-interval="false">

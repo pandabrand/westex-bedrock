@@ -42,16 +42,18 @@
         // JavaScript to be fired on the about us page
       }
     },
-    'exhibition_template_default': {
+    'single': {
       init: function() {
-        var $grid = $('.grid').masonry({
-          itemSelector: '.grid-item',
-          percentPosition: true,
-          columnWidth: '.grid-sizer'
-        });
-        $grid.imagesLoaded().progress( function() {
-          $grid.masonry('layout');
-        });
+        if( $('.grid').length ) {
+          var $grid = $('.grid').masonry({
+            itemSelector: '.grid-item',
+            percentPosition: true,
+            columnWidth: '.grid-sizer'
+          });
+          $grid.imagesLoaded().progress( function() {
+            $grid.masonry('layout');
+          });
+        }
 
         $("[data-fancybox]").fancybox({
             protect: true,
@@ -70,7 +72,7 @@
   Sage.upcoming_exhibitions = {init: Sage.home.init};
   Sage.previous_exhibitions = {init: Sage.home.init};
   Sage.current_exhibition = {init: Sage.home.init};
-  Sage.single_artist = {init: Sage.exhibition_template_default.init};
+  Sage.single = {init: Sage.single.init};
 
   // The routing fires all common scripts, followed by the page specific scripts.
   // Add additional events for more control over timing e.g. a finalize event

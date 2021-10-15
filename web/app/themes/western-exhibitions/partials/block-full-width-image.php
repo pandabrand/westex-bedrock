@@ -1,4 +1,4 @@
-<div class="fluid-container westex-vr-full-width">
+<div class="fluid-container westex-vr-full-width<?php echo $narrow_class ? ' narrow' : ''; ?>">
   <div class="row no-gutters">
     <div class="col-sm-12">
       <figure>
