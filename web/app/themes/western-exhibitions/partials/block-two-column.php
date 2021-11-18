@@ -12,7 +12,7 @@ $tc_class = $placement == 1 ? ' flex-row' : ' flex-row-reverse';
         <?php endif; ?>
       </figure>
     </div>
-    <div class="col-sm-12 col-md-6">
+    <div class="col-sm-12 col-md-6 d-flex align-items-center justify-content-center">
       <?php echo $body; ?>
     </div>
   </div>
